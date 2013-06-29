@@ -20,16 +20,15 @@ public class CurrentUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 3398051641137405616L;
 
+	@Id
+	@Column(name = "currentuser", columnDefinition = "character varying(30)", nullable = false)
+	private String userName;
 	
 	@Column(name = "nasid", nullable = false)
 	private Integer nasid;
 
 	@Column(name = "currentport", columnDefinition = "character varying(10)", nullable = false)
 	private String userPort;
-
-	@Id
-	@Column(name = "currentuser", columnDefinition = "character varying(30)", nullable = false)
-	private String userName;
 	
 	@Column(name = "currentphone", columnDefinition = "character varying(30)")
 	private String userPhone;
