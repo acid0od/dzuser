@@ -10,9 +10,13 @@ public interface IRadiusUserRepository {
 
     List<RadiusUser> findAll(String login);
 
+    List<RadiusUser> findAllOfOrder(String someLogin);
+
     RadiusUser create(RadiusUser radiusUser);
+    RadiusUser createWithId(RadiusUser radiusUser);
 
     void update(RadiusUser radiusUser);
 
     void delete(RadiusUser radiusUser);
 }
+
