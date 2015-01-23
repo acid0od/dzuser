@@ -2,6 +2,8 @@ package net.odtel.usercheck.repository;
 
 import net.odtel.usercheck.domain.RadiusAttribute;
 import net.odtel.usercheck.domain.RadiusUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +15,11 @@ import java.util.List;
 
 @Repository
 public class RadiusUserRepository implements IRadiusUserRepository {
+    private static final Logger log = LoggerFactory.getLogger(RadiusUserRepository.class);
 
-    public static final String SELECT_FROM_RUSER = "SELECT userid, username, userattr, userop, userval from ruser where username = ?";
-    public static final String SELECT_FROM_RUSER_BY_ID = "SELECT userid, username, userattr, userop, userval from ruser where userid = ?";
-    public static final String SELECT_FROM_RUSER_BY_ORDER = "SELECT userid, username, userattr, userop, userval from ruser where username like ?";
+    private static final String SELECT_FROM_RUSER = "SELECT userid, username, userattr, userop, userval from ruser where username = ?";
+    private static final String SELECT_FROM_RUSER_BY_ID = "SELECT userid, username, userattr, userop, userval from ruser where userid = ?";
+    private static final String SELECT_FROM_RUSER_BY_ORDER = "SELECT userid, username, userattr, userop, userval from ruser where username like ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -27,6 +30,8 @@ public class RadiusUserRepository implements IRadiusUserRepository {
         List<RadiusUser> radiusUsers = this.jdbcTemplate.query(SELECT_FROM_RUSER_BY_ID, new Object[]{id}, new RadiusUserMapper());
         if (radiusUsers.size() > 0) {
             user = radiusUsers.get(0);
+        } else  {
+            log.warn("db=findOne: Not fount radiusUser of id = {}", id);
         }
         return user;
     }
@@ -56,7 +61,16 @@ public class RadiusUserRepository implements IRadiusUserRepository {
 
     @Override
     public RadiusUser createWithId(RadiusUser radiusUser) {
-        return null;
+        Long id = nextId();
+        this.jdbcTemplate.update(
+                "insert into ruser VALUES (?,?,?,?,?)", id,
+                radiusUser.getUsername(),
+                radiusUser.getPasswordType().getValue(),
+                radiusUser.getPasswordOperation().getValue(),
+                radiusUser.getPassword());
+
+        return radiusUser;
+
     }
 
     @Override
@@ -76,6 +90,11 @@ public class RadiusUserRepository implements IRadiusUserRepository {
         this.jdbcTemplate.update("delete from ruser where userid = ?", radiusUser.getId());
     }
 
+    public Long nextId () {
+        Long id = this.jdbcTemplate.queryForObject("select max(userid) from ruser", Long.class) + 1L;
+        return id;
+    }
+
     private static final class RadiusUserMapper implements RowMapper<RadiusUser> {
 
         public RadiusUser mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -87,5 +106,6 @@ public class RadiusUserRepository implements IRadiusUserRepository {
             return radiusUser;
         }
     }
+
 
 }

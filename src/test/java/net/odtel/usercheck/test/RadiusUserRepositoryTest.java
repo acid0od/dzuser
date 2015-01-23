@@ -57,8 +57,6 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private RadiusUserRepository radiusUserRepository;
 
-
-
     @BeforeMethod
     public void init() {
         jdbcTemplate.execute("DROP TABLE IF EXISTS ruser");
@@ -90,10 +88,13 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
         radiusUser.setPassword("password");
         radiusUser.setPasswordType(RadiusAttribute.CLEARTEXT_PASSWORD);
         radiusUser.setUsername("pptp-user");
-        radiusUser.setId(1L);
+
+        Long id = radiusUserRepository.nextId();
+        radiusUser.setId(id);
         radiusUserRepository.create(radiusUser);
-        RadiusUser user = radiusUserRepository.findOne(1L);
-        assertEquals(user.getId(), new Long(1L));
+
+        RadiusUser user = radiusUserRepository.findOne(id);
+        assertEquals(user.getId(), new Long(id));
     }
 
     @Test
