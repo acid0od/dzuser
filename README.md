@@ -1,5 +1,11 @@
-new Project for pptp users.
+Project for CRUD under RADIUS users
 
-Пробный проект
+Begin new notification
+
+TODO
+
+2015.01.23
+Add ability to change users pay plan.
+
 
 

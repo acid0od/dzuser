@@ -15,114 +15,108 @@ import javax.persistence.Table;
 @Table(name = "jcurrent")
 public class CurrentUser implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3398051641137405616L;
 
-	@Id
-	@Column(name = "currentuser", columnDefinition = "character varying(30)", nullable = false)
-	private String userName;
-	
-	@Column(name = "nasid", nullable = false)
-	private Integer nasid;
+    private static final long serialVersionUID = 3398051641137405616L;
 
-	@Column(name = "currentport", columnDefinition = "character varying(10)", nullable = false)
-	private String userPort;
-	
-	@Column(name = "currentphone", columnDefinition = "character varying(30)")
-	private String userPhone;
-	
-	@Column(name = "currentip", columnDefinition = "character varying(15)", nullable = false)
-	private String userIP;
+    @Id
+    @Column(name = "currentuser", columnDefinition = "character varying(30)", nullable = false)
+    private String userName;
 
-	@Column(name = "currentid", columnDefinition = "character varying(32) DEFAULT ''::character varying", nullable = false)
-	private String userID;
+    @Column(name = "nasid", nullable = false)
+    private Integer nasid;
 
-	@Column(name = "currentlimit", columnDefinition = "bigint", nullable = false)
-	private Long dateDuration;
+    @Column(name = "currentport", columnDefinition = "character varying(10)", nullable = false)
+    private String userPort;
 
-	@Column(name = "currentstart", columnDefinition = "bigint DEFAULT date_part('epoch'::text, now())", nullable = false)
-	private Long dateStart;
+    @Column(name = "currentphone", columnDefinition = "character varying(30)")
+    private String userPhone;
 
-	public CurrentUser() {
+    @Column(name = "currentip", columnDefinition = "character varying(15)", nullable = false)
+    private String userIP;
 
-	}
+    @Column(name = "currentid", columnDefinition = "character varying(32) DEFAULT ''::character varying", nullable = false)
+    private String userID;
 
-	public String getUserPhone() {
-		return userPhone;
-	}
+    @Column(name = "currentlimit", columnDefinition = "bigint", nullable = false)
+    private Long dateDuration;
 
+    @Column(name = "currentstart", columnDefinition = "bigint DEFAULT date_part('epoch'::text, now())", nullable = false)
+    private Long dateStart;
 
-	public void setUserPhone(String userPhone) {
-		this.userPhone = userPhone;
-	}
+    public CurrentUser() {
 
+    }
 
-	public Integer getNasid() {
-		return nasid;
-	}
+    public String getUserPhone() {
+        return userPhone;
+    }
 
-	public void setNasid(Integer nasid) {
-		this.nasid = nasid;
-	}
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
 
-	public String getUserPort() {
-		return userPort;
-	}
+    public Integer getNasid() {
+        return nasid;
+    }
 
-	public void setUserPort(String userPort) {
-		this.userPort = userPort;
-	}
+    public void setNasid(Integer nasid) {
+        this.nasid = nasid;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getUserPort() {
+        return userPort;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserPort(String userPort) {
+        this.userPort = userPort;
+    }
 
-	public String getUserIP() {
-		return userIP;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setUserIP(String userIP) {
-		this.userIP = userIP;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public String getUserID() {
-		return userID;
-	}
+    public String getUserIP() {
+        return userIP;
+    }
 
-	public void setUserID(String userID) {
-		this.userID = userID;
-	}
+    public void setUserIP(String userIP) {
+        this.userIP = userIP;
+    }
 
-	public Long getDateDuration() {
-		return dateDuration;
-	}
+    public String getUserID() {
+        return userID;
+    }
 
-	public void setDateDuration(Long dateDuration) {
-		this.dateDuration = dateDuration;
-	}
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
-	public Long getDateStart() {
-		return dateStart;
-	}
+    public Long getDateDuration() {
+        return dateDuration;
+    }
 
-	public String getDateStartString() {
-		
-		
-		Date date = new Date(dateStart * 1000);
-		//SimpleDateFormat sdf = new SimpleDateFormat("EEEE,MMMM d,yyyy h:mm,a");
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss, MMMM dd");
-		return (sdf.format(date));
-	}
+    public void setDateDuration(Long dateDuration) {
+        this.dateDuration = dateDuration;
+    }
 
-	
-	public void setDateStart(Long dateStart) {
-		this.dateStart = dateStart;
-	}
+    public Long getDateStart() {
+        return dateStart;
+    }
+
+    public String getDateStartString() {
+
+        Date date = new Date(dateStart * 1000);
+        //SimpleDateFormat sdf = new SimpleDateFormat("EEEE,MMMM d,yyyy h:mm,a");
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss, MMMM dd");
+        return (sdf.format(date));
+    }
+
+    public void setDateStart(Long dateStart) {
+        this.dateStart = dateStart;
+    }
 
 }
