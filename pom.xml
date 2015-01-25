@@ -9,6 +9,9 @@
     <properties>
         <springframework.version>4.1.2.RELEASE</springframework.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <org.thymeleaf-version>2.1.2.RELEASE</org.thymeleaf-version>
+        <org.thymeleaf.extras.springsecurity3-version>2.1.1.RELEASE</org.thymeleaf.extras.springsecurity3-version>
+        <validation-api.version>1.1.0.Final</validation-api.version>
     </properties>
 
     <name>usercheck Maven Webapp</name>
@@ -139,6 +142,21 @@
             <version>${springframework.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>1.7.0.RELEASE</version>
+        </dependency>
+
+
+        <!-- Java Servlet API -->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Common JDBC Library -->
 
@@ -155,6 +173,33 @@
             <version>2.3.2</version>
         </dependency>
 
+
+        <!-- Other dependency -->
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
+        </dependency>
+
+        <!-- View -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${org.thymeleaf-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring4</artifactId>
+            <version>${org.thymeleaf-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity3</artifactId>
+            <version>${org.thymeleaf.extras.springsecurity3-version}</version>
+        </dependency>
 
         <!-- LogFactory  -->
 
@@ -215,7 +260,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
                 <configuration>
-                    <warName>wara-ws</warName>
+                    <warName>war</warName>
                 </configuration>
             </plugin>
             <plugin>
