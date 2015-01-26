@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Repository
+@Repository(value = "radiusUserRepository")
+@Transactional
 public class RadiusUserRepository implements IRadiusUserRepository {
     private static final Logger log = LoggerFactory.getLogger(RadiusUserRepository.class);
 
@@ -30,7 +32,7 @@ public class RadiusUserRepository implements IRadiusUserRepository {
         List<RadiusUser> radiusUsers = this.jdbcTemplate.query(SELECT_FROM_RUSER_BY_ID, new Object[]{id}, new RadiusUserMapper());
         if (radiusUsers.size() > 0) {
             user = radiusUsers.get(0);
-        } else  {
+        } else {
             log.warn("db=findOne: Not fount radiusUser of id = {}", id);
         }
         return user;
@@ -90,7 +92,7 @@ public class RadiusUserRepository implements IRadiusUserRepository {
         this.jdbcTemplate.update("delete from ruser where userid = ?", radiusUser.getId());
     }
 
-    public Long nextId () {
+    public Long nextId() {
         Long id = this.jdbcTemplate.queryForObject("select max(userid) from ruser", Long.class) + 1L;
         return id;
     }
@@ -106,6 +108,5 @@ public class RadiusUserRepository implements IRadiusUserRepository {
             return radiusUser;
         }
     }
-
 
 }

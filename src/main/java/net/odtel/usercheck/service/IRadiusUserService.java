@@ -1,10 +1,10 @@
-package net.odtel.usercheck.repository;
+package net.odtel.usercheck.service;
 
 import net.odtel.usercheck.domain.RadiusUser;
 
 import java.util.List;
 
-public interface IRadiusUserRepository {
+public interface IRadiusUserService {
 
     RadiusUser findOne(Long id);
 
@@ -19,5 +19,5 @@ public interface IRadiusUserRepository {
     void update(RadiusUser radiusUser);
 
     void delete(RadiusUser radiusUser);
-}
 
+}
