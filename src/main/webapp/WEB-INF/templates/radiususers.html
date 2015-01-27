@@ -4,5 +4,11 @@
     </head>
 <body>
     <h3>Radius Users</h3>
+    <div th:each="row,rowStat : ${page.array}">
+        <span th:text="${row.id}">1</span>
+         <span th:text="${row.username}">1</span>
+        <span th:text="${row.password}">1</span>
+    </div>
+    total:<span th:text="${page.total}">1</span>
 </body>
 </html>

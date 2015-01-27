@@ -1,52 +1,24 @@
 package net.odtel.usercheck.service;
 
 import net.odtel.usercheck.domain.RadiusUser;
-import net.odtel.usercheck.repository.RadiusUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import net.odtel.usercheck.web.utils.Page;
 
 import java.util.List;
 
-@Service(value = "radiusUserService")
-@Transactional
-public class RadiusUserService  implements  IRadiusUserService {
+public interface RadiusUserService {
 
-    @Autowired
-    private RadiusUserRepository repository;
+    RadiusUser findOne(Long id);
 
-    @Override
-    public RadiusUser findOne(Long id) {
-        return  repository.findOne(id);
-    }
+    List<RadiusUser> findAll(String login);
 
-    @Override
-    public List<RadiusUser> findAll(String login) {
-        return repository.findAll(login);
-    }
+    Page<RadiusUser> findAllOfOrder(String someLogin, Integer pageNumber, Integer limit);
 
-    @Override
-    public List<RadiusUser> findAllOfOrder(String someLogin) {
-        return  repository.findAllOfOrder(someLogin);
-    }
+    RadiusUser create(RadiusUser radiusUser);
 
-    @Override
-    public RadiusUser create(RadiusUser radiusUser) {
-        return repository.create(radiusUser);
-    }
+    RadiusUser createWithId(RadiusUser radiusUser);
 
-    @Override
-    public RadiusUser createWithId(RadiusUser radiusUser) {
-        return repository.createWithId(radiusUser);
-    }
+    void update(RadiusUser radiusUser);
 
-    @Override
-    public void update(RadiusUser radiusUser) {
-        repository.update(radiusUser);
-    }
+    void delete(RadiusUser radiusUser);
 
-    @Override
-    public void delete(RadiusUser radiusUser) {
-        repository.delete(radiusUser);
-    }
 }

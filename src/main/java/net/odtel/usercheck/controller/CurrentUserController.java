@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class CurrentUserController {
 
-	@Autowired
+	/*@Autowired
 	private CurrentUserService currentUserService;
-	
+	*/
 	@RequestMapping(value="/currentUsers", method = RequestMethod.GET)
 	String getListController (Model model){
 		
-		List<CurrentUser> currentUsers = currentUserService.findAll();
-		
+	/*	List<CurrentUser> currentUsers = currentUserService.findAll();
+
 		model.addAttribute("currentUsers", currentUsers);
-		
+	*/
 		return "currentUsers";
 	}
 }

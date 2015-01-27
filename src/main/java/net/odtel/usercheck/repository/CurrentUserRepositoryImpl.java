@@ -13,15 +13,15 @@ import net.odtel.usercheck.model.CurrentUser;
 @Repository("currentUserRepository")
 public class CurrentUserRepositoryImpl implements CurrentUserRepository {
 
-	@PersistenceContext
+	/*@PersistenceContext
 	private EntityManager em;
-	
+	*/
 	
 	@SuppressWarnings({ "unchecked" })
 	public List<CurrentUser> findAll() {
-		Query query = em.createQuery("Select j from CurrentUser j order by j.userName");
+		//Query query = em.createQuery("Select j from CurrentUser j order by j.userName");
 		
-		List <CurrentUser> currentUsers = query.getResultList();
+		List <CurrentUser> currentUsers = null; //query.getResultList();
 		
 		return currentUsers;
 	}

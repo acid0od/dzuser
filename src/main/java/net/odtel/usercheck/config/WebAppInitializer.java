@@ -6,7 +6,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import javax.servlet.Filter;
 
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebAppInitializer/* extends AbstractAnnotationConfigDispatcherServletInitializer {
     private static final String ENCODING = "UTF-8";
 
     @Override
@@ -35,5 +35,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected void customizeRegistration(javax.servlet.ServletRegistration.Dynamic registration) {
         registration.setInitParameter("defaultHtmlEscape", "true");
-    }
+    }*/
+{
 }

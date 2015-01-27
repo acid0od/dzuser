@@ -1,7 +1,7 @@
 package net.odtel.usercheck.web.utils;
 
 import net.odtel.usercheck.domain.RadiusGroup;
-import net.odtel.usercheck.service.IRadiusGroupService;
+import net.odtel.usercheck.service.RadiusGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 
@@ -11,7 +11,7 @@ import java.util.Locale;
 public class RadiusGroupFormatter implements Formatter<RadiusGroup> {
 
     @Autowired
-    private IRadiusGroupService service;
+    private RadiusGroupService service;
 
     @Override
     public RadiusGroup parse(String text, Locale locale) throws ParseException {

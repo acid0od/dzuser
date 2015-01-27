@@ -23,9 +23,11 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
 @Configuration
 @EnableJpaRepositories(basePackages = {"net.odtel.usercheck.repository"})
 @EnableTransactionManagement
+*/
 public class JpaDataSpringConfig {
 
     @Value("${dataSource.driverClassName}")

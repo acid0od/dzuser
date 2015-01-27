@@ -2,7 +2,8 @@ package net.odtel.usercheck.test;
 
 import net.odtel.usercheck.domain.RadiusAttribute;
 import net.odtel.usercheck.domain.RadiusUser;
-import net.odtel.usercheck.repository.RadiusUserRepository;
+import net.odtel.usercheck.repository.impl.RadiusUserRepositoryImpl;
+import net.odtel.usercheck.web.utils.Page;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.sql.DataSource;
+import java.awt.*;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
@@ -46,8 +48,8 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
         }
 
         @Bean
-        public RadiusUserRepository radiusUserRepository() {
-            return new RadiusUserRepository();
+        public RadiusUserRepositoryImpl radiusUserRepository() {
+            return new RadiusUserRepositoryImpl();
         }
     }
 
@@ -55,7 +57,7 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private RadiusUserRepository radiusUserRepository;
+    private RadiusUserRepositoryImpl radiusUserRepository;
 
     @BeforeMethod
     public void init() {
@@ -67,12 +69,10 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
         jdbcTemplate.execute("insert into ruser VALUES (215, 'wos', 'Cleartext-Password', ':=', 'dwwewwww' )");
     }
 
-
-
     @Test
     public void simpleSearchByOrderTest() {
-        List<RadiusUser> list = radiusUserRepository.findAllOfOrder("fss_%");
-        assertEquals(list.size(),2);
+        Page<RadiusUser> page = radiusUserRepository.findAllOfOrder("fss_%", new Integer(10), new Integer(0));
+        assertEquals(page.getTotal(), new Long(2L));
     }
 
 
@@ -116,8 +116,8 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
         assertEquals(user.getId(), new Long(213L));
         radiusUserRepository.delete(user);
 
-        List<RadiusUser> list = radiusUserRepository.findAllOfOrder("fss_%");
-        assertEquals(list.size(),1);
+        Page<RadiusUser> list = radiusUserRepository.findAllOfOrder("fss_%", new Integer(10), new Integer(0));
+        assertEquals(list.getTotal(), new Long(1L));
 
     }
 

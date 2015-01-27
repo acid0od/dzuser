@@ -23,10 +23,12 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 
+/*
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"net.odtel.usercheck.service", "net.odtel.usercheck.controller"})
 @PropertySource("classpath:/META-INF/config.properties")
+*/
 public class MainConfig extends WebMvcConfigurerAdapter {
     private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
 

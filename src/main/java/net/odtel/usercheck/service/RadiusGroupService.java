@@ -4,7 +4,7 @@ import net.odtel.usercheck.domain.RadiusGroup;
 
 import java.util.List;
 
-public interface IRadiusGroupService {
+public interface RadiusGroupService {
 
     RadiusGroup findOne(Long id);
 
