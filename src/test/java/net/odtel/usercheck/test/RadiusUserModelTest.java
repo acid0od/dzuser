@@ -42,8 +42,17 @@ public class RadiusUserModelTest {
         assertEquals(value.getAttribute().getValue(), "Mikrotik-Rate-Limit");
         assertEquals(value.getOperator().getValue(), "+=");
         assertEquals(value.getValue(), "\"1M 3M 768k 128 8 1M\"");
+
     }
 
+    @Test
+    public void simpleRadiusUserPageTest() {
 
+        Integer total = 70;
+        Integer limit = 50;
 
+        long tPage = (long) Math.ceil((double) total / (double) limit);
+        assertEquals(tPage, 2L);
+
+    }
 }

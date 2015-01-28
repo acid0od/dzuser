@@ -11,7 +11,9 @@ public interface RadiusUserService {
 
     List<RadiusUser> findAll(String login);
 
-    Page<RadiusUser> findAllOfOrder(String someLogin, Integer pageNumber, Integer limit);
+    Page<RadiusUser> findAllWithRange(Integer pageNumber, Integer limit);
+
+    Page<RadiusUser> findAllOfOrderWithRange(String someLogin, Integer pageNumber, Integer limit);
 
     RadiusUser create(RadiusUser radiusUser);
 

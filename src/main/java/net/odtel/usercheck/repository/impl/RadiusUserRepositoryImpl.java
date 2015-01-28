@@ -22,6 +22,7 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
     private static final Logger log = LoggerFactory.getLogger(RadiusUserRepositoryImpl.class);
 
     private static final String SELECT_FROM_RUSER = "SELECT userid, username, userattr, userop, userval from ruser where username = ?";
+    private static final String SELECT_FROM_RUSER_WITHOUT_SEARCH = "SELECT userid, username, userattr, userop, userval from ruser limit ? offset ?";
     private static final String SELECT_FROM_RUSER_BY_ID = "SELECT userid, username, userattr, userop, userval from ruser where userid = ?";
     private static final String SELECT_FROM_RUSER_BY_ORDER = "SELECT userid, username, userattr, userop, userval from ruser where username like ? limit ? offset ?";
 
@@ -41,7 +42,25 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
     }
 
     @Override
-    public Page<RadiusUser> findAllOfOrder(String someLogin, Integer pageNumber, Integer limit) {
+    public Page<RadiusUser> findAllWithRange(Integer pageNumber, Integer limit) {
+        Page<RadiusUser> page = new Page<>(limit);
+        Long total = this.jdbcTemplate.queryForObject("select count(*) from ruser ", new RowMapper<Long>() {
+            @Override
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong(1);
+            }
+        });
+        page.setTotal(total);
+        page.setPage(pageNumber);
+        List<RadiusUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_WITHOUT_SEARCH,
+                new Object[]{limit, page.getOffset()},
+                new RadiusUserMapper());
+        page.setArray(list);
+        return page;
+    }
+
+    @Override
+    public Page<RadiusUser> findAllOfOrderWithRange(String someLogin, Integer pageNumber, Integer limit) {
         Page<RadiusUser> page = new Page<>(limit);
         StringBuilder builder = new StringBuilder(someLogin).append("%");
         Long total = this.jdbcTemplate.queryForObject("select count(*) from ruser where username like ? ", new Object[]{builder.toString()}, new RowMapper<Long>() {

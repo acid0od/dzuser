@@ -29,8 +29,13 @@ public class RadiusUserServiceImpl implements RadiusUserService {
     }
 
     @Override
-    public Page<RadiusUser> findAllOfOrder(String someLogin, Integer pageNumber, Integer limit) {
-        return  repository.findAllOfOrder(someLogin, pageNumber, limit);
+    public Page<RadiusUser> findAllWithRange(Integer pageNumber, Integer limit) {
+        return  repository.findAllWithRange(pageNumber, limit);
+    }
+
+    @Override
+    public Page<RadiusUser> findAllOfOrderWithRange(String someLogin, Integer pageNumber, Integer limit) {
+        return  repository.findAllOfOrderWithRange(someLogin, pageNumber, limit);
     }
 
     @Override
