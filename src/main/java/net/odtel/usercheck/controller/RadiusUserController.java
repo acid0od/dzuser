@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,4 +80,14 @@ public class RadiusUserController {
         return "radiususers";
     }
 
+    @RequestMapping(value = "/radiususers", params = {"editRadiusUser"})
+    public String editRadiusUser(Integer pageNumber, @ModelAttribute("searchRequest") SearchRequest searchRequest, Model model, final HttpServletRequest req) {
+
+        final Integer id = Integer.valueOf(req.getParameter("editRadiusUser"));
+        System.out.println(">>>>>>>>>>>>>>>>>>>:" + id);
+        model.addAttribute("searchRequest", searchRequest);
+
+        return "redirect:/radiususers.html";
+
+    }
 }

@@ -62,8 +62,9 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
     @Override
     public Page<RadiusUser> findAllOfOrderWithRange(String someLogin, Integer pageNumber, Integer limit) {
         Page<RadiusUser> page = new Page<>(limit);
-        StringBuilder builder = new StringBuilder(someLogin).append("%");
-        Long total = this.jdbcTemplate.queryForObject("select count(*) from ruser where username like ? ", new Object[]{builder.toString()}, new RowMapper<Long>() {
+        String s = someLogin.replace("*", "%");
+
+        Long total = this.jdbcTemplate.queryForObject("select count(*) from ruser where username like ? ", new Object[]{s}, new RowMapper<Long>() {
             @Override
             public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return rs.getLong(1);
@@ -72,7 +73,7 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
         page.setTotal(total);
         page.setPage(pageNumber);
         List<RadiusUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_BY_ORDER,
-                                new Object[]{builder.toString(), limit, page.getOffset()},
+                                new Object[]{s, limit, page.getOffset()},
                                 new RadiusUserMapper());
         page.setArray(list);
         return page;

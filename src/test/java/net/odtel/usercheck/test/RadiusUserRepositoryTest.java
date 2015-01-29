@@ -71,7 +71,7 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void simpleSearchByOrderTest() {
-        Page<RadiusUser> page = radiusUserRepository.findAllOfOrderWithRange("fss_%", new Integer(10), new Integer(0));
+        Page<RadiusUser> page = radiusUserRepository.findAllOfOrderWithRange("fss_*", new Integer(10), new Integer(0));
         assertEquals(page.getTotal(), new Long(2L));
     }
 
@@ -116,7 +116,7 @@ public class RadiusUserRepositoryTest extends AbstractTestNGSpringContextTests {
         assertEquals(user.getId(), new Long(213L));
         radiusUserRepository.delete(user);
 
-        Page<RadiusUser> list = radiusUserRepository.findAllOfOrderWithRange("fss_%", new Integer(10), new Integer(0));
+        Page<RadiusUser> list = radiusUserRepository.findAllOfOrderWithRange("fss_*", new Integer(10), new Integer(0));
         assertEquals(list.getTotal(), new Long(1L));
 
 
