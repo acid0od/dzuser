@@ -1,6 +1,8 @@
 package net.odtel.usercheck.controller;
 
+import net.odtel.usercheck.domain.RadiusGroup;
 import net.odtel.usercheck.domain.RadiusUser;
+import net.odtel.usercheck.service.RadiusGroupService;
 import net.odtel.usercheck.service.RadiusUserService;
 import net.odtel.usercheck.web.utils.Page;
 import net.odtel.usercheck.web.utils.SearchRequest;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -34,13 +37,21 @@ public class RadiusUserController {
     @Autowired
     private RadiusUserService radiusUserService;
 
+    @Autowired
+    private RadiusGroupService radiusGroupService;
+
+     @ModelAttribute("radiusGroupList")
+    public Collection<RadiusGroup> populateRadiusGroup() {
+        return radiusGroupService.findAll();
+    }
+
     @ModelAttribute("searchRequest")
     public SearchRequest getSearchRequest() {
         return searchRequest;
     }
 
     @RequestMapping(value = "/radiususers", method = RequestMethod.GET)
-    public String viewRadiusUserList(@RequestParam(value = "page", required = false) Integer pageNumber, @ModelAttribute("searchRequest") SearchRequest searchRequest, Model model) {
+    public String viewRadiusUserList(@RequestParam(value = "pageNumber", required = false) Integer pageNumber, @ModelAttribute("searchRequest") SearchRequest searchRequest, Model model) {
 
         if (pageNumber == null) {
             pageNumber = 1;
@@ -55,7 +66,8 @@ public class RadiusUserController {
             radiusUsers = radiusUserService.findAllOfOrderWithRange(radiusUser, pageNumber, totalElementPerPage);
         }
 
-        model.addAttribute("page", radiusUsers);
+        model.addAttribute("page", "radiususers");
+        model.addAttribute("users", radiusUsers);
         model.addAttribute("searchRequest", searchRequest);
 
         return "radiususers";
@@ -74,7 +86,8 @@ public class RadiusUserController {
             radiusUsers = radiusUserService.findAllOfOrderWithRange(searchRequest.getSearchString(), pageNumber, totalElementPerPage);
         }
 
-        modelMap.addAttribute("page", radiusUsers);
+        modelMap.addAttribute("page", "radiususers");
+        modelMap.addAttribute("users", radiusUsers);
         modelMap.addAttribute("searchRequest", searchRequest);
 
         return "radiususers";
@@ -83,11 +96,14 @@ public class RadiusUserController {
     @RequestMapping(value = "/radiususers", params = {"editRadiusUser"})
     public String editRadiusUser(Integer pageNumber, @ModelAttribute("searchRequest") SearchRequest searchRequest, Model model, final HttpServletRequest req) {
 
-        final Integer id = Integer.valueOf(req.getParameter("editRadiusUser"));
-        System.out.println(">>>>>>>>>>>>>>>>>>>:" + id);
-        model.addAttribute("searchRequest", searchRequest);
+        final Long id = Long.valueOf(req.getParameter("editRadiusUser"));
 
-        return "redirect:/radiususers.html";
+        RadiusUser radiusUser = radiusUserService.findOne(id);
+        model.addAttribute("searchRequest", searchRequest);
+        model.addAttribute("radiusUser", radiusUser);
+        model.addAttribute("page", "editradiususer");
+
+        return "editradiususer";
 
     }
 }

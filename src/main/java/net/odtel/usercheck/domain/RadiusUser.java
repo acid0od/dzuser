@@ -1,6 +1,7 @@
 package net.odtel.usercheck.domain;
 
 import javax.persistence.Entity;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -11,8 +12,8 @@ public class RadiusUser {
     private String password;
     private RadiusAttribute passwordType;
     private RadiusOperation passwordOperation;
-    private Set<RadiusUserGroup> radiusUserGroup;
     private Set<RadiusUserValue> radiusUserValue;
+    private List<String> radiusUserGroup;
 
     public RadiusUser() {
         passwordOperation = RadiusOperation.ASSIGN;
@@ -56,11 +57,11 @@ public class RadiusUser {
         this.passwordType = passwordType;
     }
 
-    public Set<RadiusUserGroup> getRadiusUserGroup() {
+    public List<String> getRadiusUserGroup() {
         return radiusUserGroup;
     }
 
-    public void setRadiusUserGroup(Set<RadiusUserGroup> radiusUserGroup) {
+    public void setRadiusUserGroup(List<String> radiusUserGroup) {
         this.radiusUserGroup = radiusUserGroup;
     }
 

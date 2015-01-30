@@ -8,7 +8,9 @@ public interface RadiusGroupService {
 
     RadiusGroup findOne(Long id);
 
-    List<RadiusGroup> findAll(String name);
+    List<RadiusGroup> findAll();
+
+    List<RadiusGroup> findAllDistinctByGroupreplyname();
 
     List<RadiusGroup> findAllOfOrder(String someName);
 
