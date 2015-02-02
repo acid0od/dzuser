@@ -1,6 +1,7 @@
 package net.odtel.usercheck.service.impl;
 
 import net.odtel.usercheck.domain.RadiusGroup;
+import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.repository.RadiusGroupRepository;
 import net.odtel.usercheck.service.RadiusGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,16 @@ public class RadiusGroupServiceImpl implements RadiusGroupService {
     @Override
     public List<RadiusGroup> findAllDistinctByGroupreplyname() {
         return radiusGroupRepository.findAllDistinctByGroupreplyname();
+    }
+
+    @Override
+    public List<String> getGroupForUser(String username) {
+        return radiusGroupRepository.getGroupForUser(username);
+    }
+
+    @Override
+    public void updateGroupForUser(RadiusUser radiusUser) {
+        radiusGroupRepository.updateGroupForUser(radiusUser);
     }
 
     @Override

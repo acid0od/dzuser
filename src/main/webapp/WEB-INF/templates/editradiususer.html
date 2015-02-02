@@ -37,11 +37,13 @@
             <div class="panel-body">
                 <div class="row">
 
-                    <form class="form-horizontal" role="form" th:action="@{/updateradiususer}"
-                          th:object="${radiusUser}"
-                          method="post">
+                    <form class="form-horizontal" role="form" th:action="@{/updateradiususer.html}"
+                          th:object="${radiusUser}" method="post">
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="hidden" th:field="*{passwordType}"/>
+                        <input type="hidden" th:field="*{passwordOperation}"/>
 
-                        <div class="col-md-6">
+                        <div class="col-md-8">
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="username"
@@ -60,20 +62,71 @@
                                     <input class="form-control" th:field="*{password}" autofocus="true"/>
                                 </div>
                             </div>
+
+
+                            <!-- Begin 3 panel -->
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <button class="btn btn-default" type="submit" name="addValues"
+                                            th:text="#{radiususer.values.add}"/>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+
+                                        <div class="col-sm-12">
+
+                                            <div class="row" th:each="row,rowStat : *{radiusUserValues}">
+                                                <div class="col-sm-5">
+                                                    <label>Attribute</label>
+                                                    <input class="col-sm-4 form-control" placeholder="Attribute"
+                                                           type="text"
+                                                           th:field="*{radiusUserValues[__${rowStat.index}__].attribute}"/>
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <label>Operator</label>
+                                                    <input class="form-control" placeholder="operator" type="text"
+                                                           th:field="*{radiusUserValues[__${rowStat.index}__].operator}"/>
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <label>Value</label>
+                                                    <input class="form-control" placeholder="value" type="text"
+                                                           th:field="*{radiusUserValues[__${rowStat.index}__].value}"/>
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <label class="control-label" for="submit">&emsp;</label>
+                                                    <button class="btn btn-default" type="submit"
+                                                            name="removeAnswer"
+                                                            th:value="${rowStat.index}"
+                                                            th:text="#{radiususer.value.remove}">
+                                                        Remove Answer
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- Begin 2 panel -->
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="panel panel-default">
-                                <div class="panel-heading"><span th:text="#{question.attribute.mark}">Panel heading without title</span>
+                                <div class="panel-heading"><span th:text="#{radiususer.groups.label}">Panel heading without title</span>
                                 </div>
                                 <div class="panel-body">
                                     <div class="form-group" th:each="d : ${radiusGroupList}">
                                         <div class="col-sm-offset-2 col-sm-10">
                                             <div class="checkbox">
-                                                <input type="checkbox" th:field="*{radiusUserGroup}" th:value="${d.id}"/>
-                                                <label th:for="${#ids.prev('radiusUserGroup')}" th:text="${d.groupname}">Question  type</label>
+                                                <input type="checkbox" th:field="*{radiusUserGroup}"
+                                                       th:value="${d.groupname}"/>
+                                                <label th:for="${#ids.prev('radiusUserGroup')}"
+                                                       th:text="${d.groupname}">Question type</label>
                                             </div>
                                         </div>
                                     </div>
@@ -84,62 +137,7 @@
                         </div>
                         <!-- End 2 panel -->
 
-                        <!-- Begin 3 panel -->
-                        <!--
-                                                    <div class="col-md-12">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading">
-                                                                <button class="btn btn-default" type="submit" name="addAnswer"
-                                                                        th:text="#{question.answer.add}">Add Answer
-                                                                </button>
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                <div class="row">
 
-                                                                    <div class="col-sm-12">
-
-                                                                        <div class="row" th:each="row,rowStat : *{answer}">
-                                                                            <div class="col-sm-5">
-                                                                                <label>Answer</label>
-                                                                                <input class="col-sm-4 form-control" placeholder="Answer"
-                                                                                       type="text"
-                                                                                       th:field="*{answer[__${rowStat.index}__].title}"/>
-                                                                            </div>
-                                                                            <div class="col-sm-1">
-                                                                                <label>Cost</label>
-                                                                                <input class="form-control" placeholder="5" type="text"
-                                                                                       th:field="*{answer[__${rowStat.index}__].cost}"/>
-                                                                            </div>
-                                                                            <div class="col-sm-1">
-                                                                                <label>Right</label>
-                                                                                <input class="form-control" placeholder="0" type="text"
-                                                                                       th:field="*{answer[__${rowStat.index}__].right}"/>
-                                                                            </div>
-                                                                            <div class="col-sm-3">
-                                                                                <label>Prompt</label>
-                                                                                <input class="form-control" placeholder="Prompt" type="text"
-                                                                                       th:field="*{answer[__${rowStat.index}__].prompt}"/>
-                                                                            </div>
-
-                                                                            <div class="col-sm-1">
-                                                                                <label class="control-label" for="submit">&emsp;</label>
-                                                                                <button class="btn btn-default" type="submit"
-                                                                                        name="removeAnswer"
-                                                                                        th:value="${rowStat.index}"
-                                                                                        th:text="#{question.answer.remove}">
-                                                                                    Remove Answer
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                        -->
                         <div class="row">
 
                             <div class="form-group">

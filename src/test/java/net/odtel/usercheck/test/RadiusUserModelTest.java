@@ -25,7 +25,7 @@ public class RadiusUserModelTest {
         radiusUser.setUsername("user");
 
         radiusUserValue = new RadiusUserValue("user", RadiusAttribute.MIKROTIK_RATE_LIMIT, RadiusOperation.ADD_NEW_VALUE, "\"1M 3M 768k 128 8 1M\"");
-        radiusUser.setRadiusUserValue(Collections.singleton(radiusUserValue));
+        radiusUser.setRadiusUserValues(Collections.singletonList(radiusUserValue));
 
     }
 
@@ -37,7 +37,7 @@ public class RadiusUserModelTest {
 
     @Test
     public void simpleRadiusUserValueTest() {
-        RadiusUserValue value = radiusUser.getUserValue().iterator().next();
+        RadiusUserValue value = radiusUser.getRadiusUserValues().iterator().next();
 
         assertEquals(value.getAttribute().getValue(), "Mikrotik-Rate-Limit");
         assertEquals(value.getOperator().getValue(), "+=");

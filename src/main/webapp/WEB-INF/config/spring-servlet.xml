@@ -49,4 +49,14 @@
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
 
+
+    <bean id="conversionService"
+                class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+                <property name="formatters">
+                        <set>
+                                <bean class="net.odtel.usercheck.web.utils.RadiusGroupFormatter" />
+                        </set>
+                </property>
+        </bean>
+
 </beans>

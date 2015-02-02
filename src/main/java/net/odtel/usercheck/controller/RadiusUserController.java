@@ -1,7 +1,10 @@
 package net.odtel.usercheck.controller;
 
+import net.odtel.usercheck.domain.RadiusAttribute;
 import net.odtel.usercheck.domain.RadiusGroup;
+import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUser;
+import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.service.RadiusGroupService;
 import net.odtel.usercheck.service.RadiusUserService;
 import net.odtel.usercheck.web.utils.Page;
@@ -11,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.AutoPopulatingList;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +46,7 @@ public class RadiusUserController {
 
      @ModelAttribute("radiusGroupList")
     public Collection<RadiusGroup> populateRadiusGroup() {
-        return radiusGroupService.findAll();
+        return radiusGroupService.findAllDistinctByGroupreplyname();
     }
 
     @ModelAttribute("searchRequest")
@@ -60,12 +64,14 @@ public class RadiusUserController {
         Page<RadiusUser> radiusUsers = null;
         String radiusUser = searchRequest.getSearchString();
 
+
         if (radiusUser == null || radiusUser.trim().length() == 0) {
             radiusUsers = radiusUserService.findAllWithRange(pageNumber, totalElementPerPage);
         } else {
             radiusUsers = radiusUserService.findAllOfOrderWithRange(radiusUser, pageNumber, totalElementPerPage);
         }
 
+        searchRequest.setPageNumber(pageNumber);
         model.addAttribute("page", "radiususers");
         model.addAttribute("users", radiusUsers);
         model.addAttribute("searchRequest", searchRequest);
@@ -98,12 +104,51 @@ public class RadiusUserController {
 
         final Long id = Long.valueOf(req.getParameter("editRadiusUser"));
 
+
         RadiusUser radiusUser = radiusUserService.findOne(id);
+        //TODO remove this to the Service class
+        List<String> groups = radiusGroupService.getGroupForUser(radiusUser.getUsername());
+        radiusUser.setRadiusUserGroup(groups);
+
+        List<RadiusUserValue> radiusUserValues = new AutoPopulatingList<>(RadiusUserValue.class);
+        RadiusUserValue value = new RadiusUserValue();
+        value.setAttribute(RadiusAttribute.MIKROTIK_RATE_LIMIT);
+        value.setOperator(RadiusOperation.ASSIGN);
+        value.setValue("Ciscpo ESS");
+        radiusUserValues.add(value);
+        radiusUser.setRadiusUserValues(radiusUserValues);
+
         model.addAttribute("searchRequest", searchRequest);
         model.addAttribute("radiusUser", radiusUser);
         model.addAttribute("page", "editradiususer");
 
         return "editradiususer";
+
+    }
+
+    @RequestMapping(value = "/updateradiususer")
+    public String updateRadiusUser(@ModelAttribute("searchRequest") SearchRequest searchRequest, @ModelAttribute("radiusUser") RadiusUser radiusUser ,Model model, final HttpServletRequest req) {
+
+        System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{" + radiusUser.toString());
+        System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{" + searchRequest.toString());
+
+        Page<RadiusUser> radiusUsers = null;
+        String radiusUserSearchString = searchRequest.getSearchString();
+
+        radiusGroupService.updateGroupForUser(radiusUser);
+        radiusUserService.update(radiusUser);
+
+        if (radiusUserSearchString == null || radiusUserSearchString.trim().length() == 0) {
+            radiusUsers = radiusUserService.findAllWithRange(searchRequest.getPageNumber(), totalElementPerPage);
+        } else {
+            radiusUsers = radiusUserService.findAllOfOrderWithRange(radiusUserSearchString, searchRequest.getPageNumber(), totalElementPerPage);
+        }
+
+        model.addAttribute("searchRequest", searchRequest);
+        model.addAttribute("users", radiusUsers);
+        model.addAttribute("page", "radiususers");
+
+        return "radiususers";
 
     }
 }

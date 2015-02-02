@@ -1,6 +1,7 @@
 package net.odtel.usercheck.service;
 
 import net.odtel.usercheck.domain.RadiusGroup;
+import net.odtel.usercheck.domain.RadiusUser;
 
 import java.util.List;
 
@@ -13,6 +14,10 @@ public interface RadiusGroupService {
     List<RadiusGroup> findAllDistinctByGroupreplyname();
 
     List<RadiusGroup> findAllOfOrder(String someName);
+
+    List<String> getGroupForUser(String username);
+
+    void updateGroupForUser(RadiusUser radiusUser);
 
     RadiusGroup create(RadiusGroup radiusGroup);
 
