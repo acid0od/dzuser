@@ -47,12 +47,6 @@ public class RadiusUserModelTest {
 
     @Test
     public void simpleRadiusUserPageTest() {
-
-        Integer total = 70;
-        Integer limit = 50;
-
-        long tPage = (long) Math.ceil((double) total / (double) limit);
-        assertEquals(tPage, 2L);
-
+        System.out.println("+ [" + RadiusOperation.getKey("==") + "]");
     }
 }

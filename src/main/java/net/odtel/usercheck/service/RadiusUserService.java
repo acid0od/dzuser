@@ -1,6 +1,7 @@
 package net.odtel.usercheck.service;
 
 import net.odtel.usercheck.domain.RadiusUser;
+import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.web.utils.Page;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface RadiusUserService {
     void update(RadiusUser radiusUser);
 
     void delete(RadiusUser radiusUser);
+
+    List<RadiusUserValue> findUserValue(String radiusUser);
 
 }

@@ -18,4 +18,14 @@ public enum RadiusOperation {
         return this.value;
     }
 
+    public static RadiusOperation getKey (String value) throws IllegalArgumentException{
+        for (RadiusOperation radiusOperation : RadiusOperation.values()) {
+            if (radiusOperation.getValue().equals(value)) {
+                return radiusOperation;
+            }
+        }
+        throw new IllegalArgumentException("Illegal RadiusOpertion name: " + value);
+    }
+
+
 }

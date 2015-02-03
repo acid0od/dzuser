@@ -1,5 +1,8 @@
 package net.odtel.usercheck.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class RadiusUserValue {
 
     private Long id;
@@ -58,4 +61,10 @@ public class RadiusUserValue {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.DEFAULT_STYLE);
+    }
+
 }

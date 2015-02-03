@@ -77,18 +77,27 @@
                                         <div class="col-sm-12">
 
                                             <div class="row" th:each="row,rowStat : *{radiusUserValues}">
-                                                <div class="col-sm-5">
+                                                <input type="hidden" th:field="*{radiusUserValues[__${rowStat.index}__].id}"/>
+
+                                                <div class="col-sm-3">
                                                     <label>Attribute</label>
-                                                    <input class="col-sm-4 form-control" placeholder="Attribute"
-                                                           type="text"
-                                                           th:field="*{radiusUserValues[__${rowStat.index}__].attribute}"/>
+                                                    <select th:field="*{radiusUserValues[__${rowStat.index}__].attribute}">
+                                                        <option th:each="value : ${radiusAttribute}"
+                                                                th:value="${value}"
+                                                                th:text="${value.value}">Value
+                                                        </option>
+                                                    </select>
                                                 </div>
-                                                <div class="col-sm-1">
+                                                <div class="col-sm-2">
                                                     <label>Operator</label>
-                                                    <input class="form-control" placeholder="operator" type="text"
-                                                           th:field="*{radiusUserValues[__${rowStat.index}__].operator}"/>
+                                                    <select th:field="*{radiusUserValues[__${rowStat.index}__].operator}">
+                                                        <option th:each="value : ${radiusOperation}"
+                                                                th:value="${value}"
+                                                                th:text="${value.value}">Value
+                                                        </option>
+                                                    </select>
                                                 </div>
-                                                <div class="col-sm-1">
+                                                <div class="col-sm-6">
                                                     <label>Value</label>
                                                     <input class="form-control" placeholder="value" type="text"
                                                            th:field="*{radiusUserValues[__${rowStat.index}__].value}"/>
@@ -96,10 +105,11 @@
                                                 <div class="col-sm-1">
                                                     <label class="control-label" for="submit">&emsp;</label>
                                                     <button class="btn btn-default" type="submit"
-                                                            name="removeAnswer"
-                                                            th:value="${rowStat.index}"
-                                                            th:text="#{radiususer.value.remove}">
-                                                        Remove Answer
+                                                            name="removeValue"
+                                                            th:value="${rowStat.index}">
+                                                            <span
+                                                                    class="glyphicon glyphicon-remove"
+                                                                    aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                             </div>

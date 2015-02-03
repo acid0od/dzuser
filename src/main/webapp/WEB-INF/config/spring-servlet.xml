@@ -51,12 +51,14 @@
 
 
     <bean id="conversionService"
-                class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-                <property name="formatters">
-                        <set>
-                                <bean class="net.odtel.usercheck.web.utils.RadiusGroupFormatter" />
-                        </set>
-                </property>
-        </bean>
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <bean class="net.odtel.usercheck.web.utils.RadiusGroupFormatter"/>
+                <bean class="net.odtel.usercheck.web.utils.RadiusAttributeFormatter"/>
+                <bean class="net.odtel.usercheck.web.utils.RadiusOperationFormatter"/>
+            </set>
+        </property>
+    </bean>
 
 </beans>

@@ -44,9 +44,27 @@ public class RadiusUserController {
     @Autowired
     private RadiusGroupService radiusGroupService;
 
-     @ModelAttribute("radiusGroupList")
+    @ModelAttribute("radiusGroupList")
     public Collection<RadiusGroup> populateRadiusGroup() {
         return radiusGroupService.findAllDistinctByGroupreplyname();
+    }
+
+    @ModelAttribute("radiusAttribute")
+    public Collection<RadiusAttribute> populateRadiusAttribute() {
+        List<RadiusAttribute> stringList = new ArrayList<>();
+        for (RadiusAttribute radiusAttribute : RadiusAttribute.values()) {
+            stringList.add(radiusAttribute);
+        }
+        return stringList;
+    }
+
+    @ModelAttribute("radiusOperation")
+    public Collection<RadiusOperation> populateRadiusOperation() {
+        List<RadiusOperation> stringList = new ArrayList<>();
+        for (RadiusOperation radiusOperation : RadiusOperation.values()) {
+            stringList.add(radiusOperation);
+        }
+        return stringList;
     }
 
     @ModelAttribute("searchRequest")
@@ -63,7 +81,6 @@ public class RadiusUserController {
 
         Page<RadiusUser> radiusUsers = null;
         String radiusUser = searchRequest.getSearchString();
-
 
         if (radiusUser == null || radiusUser.trim().length() == 0) {
             radiusUsers = radiusUserService.findAllWithRange(pageNumber, totalElementPerPage);
@@ -104,20 +121,14 @@ public class RadiusUserController {
 
         final Long id = Long.valueOf(req.getParameter("editRadiusUser"));
 
-
         RadiusUser radiusUser = radiusUserService.findOne(id);
         //TODO remove this to the Service class
         List<String> groups = radiusGroupService.getGroupForUser(radiusUser.getUsername());
         radiusUser.setRadiusUserGroup(groups);
-
-        List<RadiusUserValue> radiusUserValues = new AutoPopulatingList<>(RadiusUserValue.class);
-        RadiusUserValue value = new RadiusUserValue();
-        value.setAttribute(RadiusAttribute.MIKROTIK_RATE_LIMIT);
-        value.setOperator(RadiusOperation.ASSIGN);
-        value.setValue("Ciscpo ESS");
-        radiusUserValues.add(value);
+        List<RadiusUserValue> radiusUserValues = radiusUserService.findUserValue(radiusUser.getUsername());
         radiusUser.setRadiusUserValues(radiusUserValues);
 
+        //List<RadiusUserValue> radiusUserValues = new AutoPopulatingList<>(RadiusUserValue.class);
         model.addAttribute("searchRequest", searchRequest);
         model.addAttribute("radiusUser", radiusUser);
         model.addAttribute("page", "editradiususer");
@@ -127,7 +138,7 @@ public class RadiusUserController {
     }
 
     @RequestMapping(value = "/updateradiususer")
-    public String updateRadiusUser(@ModelAttribute("searchRequest") SearchRequest searchRequest, @ModelAttribute("radiusUser") RadiusUser radiusUser ,Model model, final HttpServletRequest req) {
+    public String updateRadiusUser(@ModelAttribute("searchRequest") SearchRequest searchRequest, @ModelAttribute("radiusUser") RadiusUser radiusUser, Model model, final HttpServletRequest req) {
 
         System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{" + radiusUser.toString());
         System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{" + searchRequest.toString());
@@ -151,4 +162,19 @@ public class RadiusUserController {
         return "radiususers";
 
     }
+
+    @RequestMapping(value = "/updateradiususer", params = "addValues")
+    public String updateRadiusUserAddValues(@ModelAttribute("radiusUser") RadiusUser radiusUser, final BindingResult result) {
+        radiusUser.getRadiusUserValues().add(new RadiusUserValue());
+        return "editradiususer";
+    }
+
+    @RequestMapping(value = "/updateradiususer", params = "removeValue")
+    public String updateRadiusUserRemoveValues(@ModelAttribute("radiusUser") RadiusUser radiusUser, final BindingResult result, final HttpServletRequest req) {
+        final Integer rowId = Integer.valueOf(req.getParameter("removeValue"));
+        radiusUser.getRadiusUserValues().remove(rowId.intValue());
+        return "editradiususer";
+    }
+
+
 }

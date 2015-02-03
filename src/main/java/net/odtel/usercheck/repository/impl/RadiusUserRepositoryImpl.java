@@ -1,7 +1,9 @@
 package net.odtel.usercheck.repository.impl;
 
 import net.odtel.usercheck.domain.RadiusAttribute;
+import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUser;
+import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.repository.RadiusUserRepository;
 import net.odtel.usercheck.web.utils.Page;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
     private static final String SELECT_FROM_RUSER_WITHOUT_SEARCH = "SELECT userid, username, userattr, userop, userval from ruser limit ? offset ?";
     private static final String SELECT_FROM_RUSER_BY_ID = "SELECT userid, username, userattr, userop, userval from ruser where userid = ?";
     private static final String SELECT_FROM_RUSER_BY_ORDER = "SELECT userid, username, userattr, userop, userval from ruser where username like ? limit ? offset ?";
+    private static final String SEARCH_USERS_VALUES_FROM_USERSREPLAY = "select userreplyid, userreplyname, userreplyattr, userreplyop, userreplyval from ruserreply where userreplyname = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -60,6 +63,25 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
     }
 
     @Override
+    public List<RadiusUserValue> findUserValue(String radiusUser) {
+        List<RadiusUserValue> values = this.jdbcTemplate.query(SEARCH_USERS_VALUES_FROM_USERSREPLAY,
+                new Object[]{radiusUser},
+                new RowMapper<RadiusUserValue>() {
+                    @Override
+                    public RadiusUserValue mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        RadiusUserValue value = new RadiusUserValue();
+                        value.setOperator(RadiusOperation.getKey(rs.getString("userreplyop")));
+                        value.setAttribute(RadiusAttribute.getKey(rs.getString("userreplyattr")));
+                        value.setValue(rs.getString("userreplyval"));
+                        value.setId(rs.getLong("userreplyid"));
+                        return value;
+                    }
+                });
+
+        return values;
+    }
+
+    @Override
     public Page<RadiusUser> findAllOfOrderWithRange(String someLogin, Integer pageNumber, Integer limit) {
         Page<RadiusUser> page = new Page<>(limit);
         String s = someLogin.replace("*", "%");
@@ -73,8 +95,8 @@ public class RadiusUserRepositoryImpl implements RadiusUserRepository {
         page.setTotal(total);
         page.setPage(pageNumber);
         List<RadiusUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_BY_ORDER,
-                                new Object[]{s, limit, page.getOffset()},
-                                new RadiusUserMapper());
+                new Object[]{s, limit, page.getOffset()},
+                new RadiusUserMapper());
         page.setArray(list);
         return page;
     }

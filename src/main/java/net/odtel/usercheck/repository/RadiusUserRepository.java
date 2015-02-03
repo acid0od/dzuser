@@ -1,6 +1,7 @@
 package net.odtel.usercheck.repository;
 
 import net.odtel.usercheck.domain.RadiusUser;
+import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.web.utils.Page;
 
 import java.util.List;
@@ -23,5 +24,6 @@ public interface RadiusUserRepository {
 
     void delete(RadiusUser radiusUser);
 
+    List<RadiusUserValue> findUserValue(String radiusUser);
 }
 
