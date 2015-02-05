@@ -47,6 +47,21 @@ public class RadiusUserModelTest {
 
     @Test
     public void simpleRadiusUserPageTest() {
-        System.out.println("+ [" + RadiusOperation.getKey("==") + "]");
+        String s = "7";
+        int limit = 12;
+
+        int startIndex = (s == null) ? 0 : Integer.parseInt(s) + 1;
+
+        int endIndex = startIndex + limit - 1 ;
+        int step = (limit > 10) ? (int) Math.ceil(limit / 10) + 1: limit;
+
+        System.out.println("+ [" + startIndex + "]" + endIndex + " step=" + step);
+
+        for (long i = startIndex; i <= endIndex; i += step) {
+            final int end = (int) Math.min(endIndex, i + step - 1);
+            final int start = (int) i;
+
+            System.out.println("+ [" + start + " " + end + "] " + (end - start + 1) );
+        }
     }
 }

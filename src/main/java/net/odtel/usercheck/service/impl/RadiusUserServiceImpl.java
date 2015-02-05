@@ -3,6 +3,7 @@ package net.odtel.usercheck.service.impl;
 import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.repository.RadiusUserRepository;
+import net.odtel.usercheck.repository.RadiusUserValueRepository;
 import net.odtel.usercheck.repository.impl.RadiusUserRepositoryImpl;
 import net.odtel.usercheck.service.RadiusUserService;
 import net.odtel.usercheck.web.utils.Page;
@@ -18,6 +19,9 @@ public class RadiusUserServiceImpl implements RadiusUserService {
 
     @Autowired
     private RadiusUserRepository repository;
+
+    @Autowired
+    private RadiusUserValueRepository radiusUserValueRepository;
 
     @Override
     public RadiusUser findOne(Long id) {
@@ -52,7 +56,16 @@ public class RadiusUserServiceImpl implements RadiusUserService {
 
     @Override
     public void update(RadiusUser radiusUser) {
+        if (radiusUser.getRadiusUserValues() != null) {
+            List<RadiusUserValue> values = radiusUser.getRadiusUserValues();
+            for (RadiusUserValue value : values) {
+                value.setUsername(radiusUser.getUsername());
+                radiusUserValueRepository.createOrUpdate(value);
+            }
+        }
+
         repository.update(radiusUser);
+
     }
 
     @Override

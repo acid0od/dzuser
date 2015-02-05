@@ -77,7 +77,8 @@
                                         <div class="col-sm-12">
 
                                             <div class="row" th:each="row,rowStat : *{radiusUserValues}">
-                                                <input type="hidden" th:field="*{radiusUserValues[__${rowStat.index}__].id}"/>
+                                                <input type="hidden"
+                                                       th:field="*{radiusUserValues[__${rowStat.index}__].id}"/>
 
                                                 <div class="col-sm-3">
                                                     <label>Attribute</label>
@@ -121,8 +122,23 @@
                                 </div>
                             </div>
 
-                        </div>
 
+                            <div class="col-md-8">
+                                <p> Примеры пользовательских аттрибутов</p>
+
+                                <p> Cisco-AVPair <span>+=</span> "ip:addr-pool=zhov_sr"</p>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-1 col-sm-10">
+                                        <button class="btn btn-primary" type="submit">User Update</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <!-- Begin 2 panel -->
 
                         <div class="col-md-4">
@@ -147,15 +163,6 @@
                         </div>
                         <!-- End 2 panel -->
 
-
-                        <div class="row">
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-1 col-sm-10">
-                                    <button class="btn btn-primary" type="submit">User Update</button>
-                                </div>
-                            </div>
-                        </div>
 
                     </form>
                 </div>

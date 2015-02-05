@@ -126,6 +126,9 @@ public class RadiusUserController {
         List<String> groups = radiusGroupService.getGroupForUser(radiusUser.getUsername());
         radiusUser.setRadiusUserGroup(groups);
         List<RadiusUserValue> radiusUserValues = radiusUserService.findUserValue(radiusUser.getUsername());
+        if (radiusUserValues == null) {
+            radiusUserValues = new AutoPopulatingList<RadiusUserValue>(RadiusUserValue.class);
+        }
         radiusUser.setRadiusUserValues(radiusUserValues);
 
         //List<RadiusUserValue> radiusUserValues = new AutoPopulatingList<>(RadiusUserValue.class);
@@ -165,6 +168,11 @@ public class RadiusUserController {
 
     @RequestMapping(value = "/updateradiususer", params = "addValues")
     public String updateRadiusUserAddValues(@ModelAttribute("radiusUser") RadiusUser radiusUser, final BindingResult result) {
+        if (radiusUser.getRadiusUserValues() == null) {
+            List<RadiusUserValue> radiusUserValues = new ArrayList<>();
+            radiusUser.setRadiusUserValues(radiusUserValues);
+        }
+
         radiusUser.getRadiusUserValues().add(new RadiusUserValue());
         return "editradiususer";
     }

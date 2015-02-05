@@ -65,12 +65,13 @@ public class RadiusGroupRepositoryImpl implements RadiusGroupRepository {
     public void updateGroupForUser(RadiusUser radiusUser) {
 
         deleteGroupForUser(radiusUser.getUsername());
-
-        for (String groupname : radiusUser.getRadiusUserGroup()) {
-            this.jdbcTemplate.update(
-                    "insert into musrgrp (username, groupname, usrgrppriority) VALUES (?, ?, 0)",
-                    radiusUser.getUsername(),
-                    groupname);
+        if (radiusUser.getRadiusUserGroup() != null) {
+            for (String groupname : radiusUser.getRadiusUserGroup()) {
+                this.jdbcTemplate.update(
+                        "insert into musrgrp (username, groupname, usrgrppriority) VALUES (?, ?, 0)",
+                        radiusUser.getUsername(),
+                        groupname);
+            }
         }
     }
 
