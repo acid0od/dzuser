@@ -5,6 +5,7 @@ import net.odtel.usercheck.domain.RadiusGroup;
 import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.repository.RadiusGroupRepository;
+import net.odtel.usercheck.web.utils.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class RadiusGroupRepositoryImpl implements RadiusGroupRepository {
     private static final Logger log = LoggerFactory.getLogger(RadiusUserRepositoryImpl.class);
 
     private static String SELECT_FIND_ALL_DISTINCT = "SELECT DISTINCT groupreplyname from rgroupreply order by groupreplyname";
+    private static String SELECT_FROM_RGROUP_WITH_SEARCH = "SELECT DISTINCT groupreplyname from rgroupreply where groupreplyname like ? order by groupreplyname limit ? offset ?";
+    private static String SELECT_FROM_RGROUP_WITHOUT_SEARCH = "SELECT DISTINCT groupreplyname from rgroupreply order by groupreplyname limit ? offset ?";
+    private static String SELECT_COUNT_ALL_DISTINCT = "SELECT count (DISTINCT groupreplyname) from rgroupreply";
     private static String SELECT_FIND_ALL = "SELECT DISTINCT groupreplyname, groupreplyid, groupreplyattr, groupreplyop, groupreplyval from rgroupreply order by groupreplyname";
     private static String SELECT_MGRPUSR_USER = "select groupname from musrgrp where username = ?";
 
@@ -75,15 +79,75 @@ public class RadiusGroupRepositoryImpl implements RadiusGroupRepository {
         }
     }
 
+    @Override
+    public List<RadiusGroup> findAllByUserName() {
+        return null;
+    }
+
+    @Override
+    public Page<RadiusGroup> findAll(Integer pageNumber, Integer limit){
+        Page<RadiusGroup> page = new Page<>(limit);
+        Long total = getTotalRecords();
+        page.setTotal(total);
+        page.setPage(pageNumber);
+
+        List<RadiusGroup> list = this.jdbcTemplate.query(SELECT_FROM_RGROUP_WITHOUT_SEARCH,
+                new Object[]{limit, page.getOffset()},
+                new RowMapper<RadiusGroup>() {
+                    @Override
+                    public RadiusGroup mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        RadiusGroup radiusGroup = new RadiusGroup();
+                        radiusGroup.setGroupname(rs.getString("groupreplyname"));
+                        return radiusGroup;
+                    }
+                });
+
+        page.setArray(list);
+
+        return page;
+    }
+
+    @Override
+    public Page<RadiusGroup> findAllByGroupName(String groupName, Integer pageNumber, Integer limit){
+        Page<RadiusGroup> page = new Page<>(limit);
+        Long total = getTotalRecords();
+        page.setTotal(total);
+        page.setPage(pageNumber);
+        String stringSearch = groupName.replace("*", "%");
+
+        List<RadiusGroup> list = this.jdbcTemplate.query(SELECT_FROM_RGROUP_WITH_SEARCH,
+                new Object[]{stringSearch, limit, page.getOffset()},
+                new RowMapper<RadiusGroup>() {
+                    @Override
+                    public RadiusGroup mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        RadiusGroup radiusGroup = new RadiusGroup();
+                        radiusGroup.setGroupname(rs.getString("groupreplyname"));
+                        return radiusGroup;
+                    }
+                });
+
+        page.setArray(list);
+
+        return page;
+    }
+
+
+// --------------------- Private Methods -----------------------------------------
+
+    private Long getTotalRecords() {
+        Long total = this.jdbcTemplate.queryForObject(SELECT_COUNT_ALL_DISTINCT, new RowMapper<Long>() {
+            @Override
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong(1);
+            }
+        });
+        return total;
+    }
+
     private void deleteGroupForUser(String username) {
         this.jdbcTemplate.update(
                 "delete from musrgrp where username = ?",
                 username);
-    }
-
-    @Override
-    public List<RadiusGroup> findAllByUserName() {
-        return null;
     }
 
     private static final class RadiusGroupMapper implements RowMapper<RadiusGroup> {

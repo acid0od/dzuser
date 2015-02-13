@@ -2,6 +2,7 @@ package net.odtel.usercheck.service;
 
 import net.odtel.usercheck.domain.RadiusGroup;
 import net.odtel.usercheck.domain.RadiusUser;
+import net.odtel.usercheck.web.utils.Page;
 
 import java.util.List;
 
@@ -12,6 +13,10 @@ public interface RadiusGroupService {
     List<RadiusGroup> findAll();
 
     List<RadiusGroup> findAllDistinctByGroupreplyname();
+
+    Page<RadiusGroup> findAll(Integer pageNumber, Integer limit);
+
+    Page<RadiusGroup> findAllByGroupName(String radiusGroup, Integer pageNumber, Integer totalElementPerPage);
 
     List<RadiusGroup> findAllOfOrder(String someName);
 
@@ -26,4 +31,6 @@ public interface RadiusGroupService {
     void update(RadiusGroup radiusGroup);
 
     void delete(RadiusGroup radiusGroup);
+
+
 }

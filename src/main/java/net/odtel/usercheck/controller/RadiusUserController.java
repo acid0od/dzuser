@@ -32,8 +32,6 @@ import java.util.List;
 @Scope("session")
 public class RadiusUserController {
 
-    private List<RadiusUser> customerAnswerList = new ArrayList<>();
-
     private Integer totalElementPerPage = 50;
 
     private SearchRequest searchRequest = new SearchRequest();
@@ -96,6 +94,7 @@ public class RadiusUserController {
         return "radiususers";
     }
 
+
     @RequestMapping(value = "/radiususers", method = RequestMethod.POST)
     public String viewRadiusUserListByName(@ModelAttribute("searchRequest") SearchRequest searchRequest, final BindingResult result, final ModelMap modelMap) {
         Integer pageNumber = 1;
@@ -115,6 +114,8 @@ public class RadiusUserController {
 
         return "radiususers";
     }
+
+
 
     @RequestMapping(value = "/radiususers", params = {"editRadiusUser"})
     public String editRadiusUser(Integer pageNumber, @ModelAttribute("searchRequest") SearchRequest searchRequest, Model model, final HttpServletRequest req) {
@@ -182,6 +183,53 @@ public class RadiusUserController {
         final Integer rowId = Integer.valueOf(req.getParameter("removeValue"));
         radiusUser.getRadiusUserValues().remove(rowId.intValue());
         return "editradiususer";
+    }
+
+    // Groups
+
+    @RequestMapping(value = "/radiusgroups", method = RequestMethod.GET)
+    public String viewRadiusGroupList(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                                      @ModelAttribute("searchRequest") SearchRequest searchRequest,
+                                      Model model) {
+
+        if (pageNumber == null) {
+            pageNumber = 1;
+        }
+
+        Page<RadiusGroup> radiusGroupPage = null;
+        String radiusGroup = searchRequest.getSearchString();
+
+        if (radiusGroup == null || radiusGroup.trim().length() == 0) {
+            radiusGroupPage = radiusGroupService.findAll(pageNumber, totalElementPerPage);
+        } else {
+            radiusGroupPage = radiusGroupService.findAllByGroupName(radiusGroup, pageNumber, totalElementPerPage);
+        }
+
+        searchRequest.setPageNumber(pageNumber);
+        model.addAttribute("page", "radiusgroups");
+        model.addAttribute("groups", radiusGroupPage);
+        model.addAttribute("searchRequest", searchRequest);
+
+        return "radiusgroups";
+    }
+
+    @RequestMapping(value = "/radiusgroups", method = RequestMethod.POST)
+    public String viewRadiusGroupListByName(@ModelAttribute("searchRequest") SearchRequest searchRequest, final BindingResult result, final ModelMap modelMap) {
+        Integer pageNumber = 1;
+
+        Page<RadiusGroup> radiusGroupPage = null;
+
+        if (searchRequest == null || searchRequest.getSearchString() == null || searchRequest.getSearchString().trim().length() == 0) {
+            radiusGroupPage = radiusGroupService.findAll(pageNumber, totalElementPerPage);
+        } else {
+            radiusGroupPage = radiusGroupService.findAllByGroupName(searchRequest.getSearchString(), pageNumber, totalElementPerPage);
+        }
+
+        modelMap.addAttribute("page", "radiusgroups");
+        modelMap.addAttribute("groups", radiusGroupPage);
+        modelMap.addAttribute("searchRequest", searchRequest);
+
+        return "radiususers";
     }
 
 

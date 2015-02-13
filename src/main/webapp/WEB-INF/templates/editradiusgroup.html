@@ -30,15 +30,15 @@
 
             <div class="panel-heading">
 
-                <h4 th:text="#{radiususer.create.new}" th:if="${page} == 'newradiususer'">Create new question</h4>
-                <h4 th:text="#{radiususer.update.title}" th:if="${page} == 'editradiususer'">Update new question</h4>
+                <h4 th:text="#{radiusgroup.create.new}" th:if="${page} == 'newradiusgroup'">Create new group</h4>
+                <h4 th:text="#{radiusgroup.update.title}" th:if="${page} == 'editradiusgroup'">Update exist group</h4>
 
             </div>
+
             <div class="panel-body">
                 <div class="row">
 
-                    <form class="form-horizontal" role="form" th:action="@{/updateradiususer.html}"
-                          th:object="${radiusUser}" method="post">
+                    <form class="form-horizontal" role="form" th:action="@{/updateradiususer.html}"  th:object="${radiusUser}" method="post">
                         <input type="hidden" th:field="*{id}"/>
                         <input type="hidden" th:field="*{passwordType}"/>
                         <input type="hidden" th:field="*{passwordOperation}"/>
@@ -143,37 +143,7 @@
                             </div>
 
                         </div>
-                        <!-- Begin 2 panel -->
 
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><span th:text="#{radiususer.groups.label}">Panel heading without title</span>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="form-group" th:each="d : ${radiusGroupList}">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <div class="checkbox">
-                                                <input type="checkbox" th:field="*{radiusUserGroup}"
-                                                       th:value="${d.groupname}"/>
-                                                <label th:for="${#ids.prev('radiusUserGroup')}"
-                                                       th:text="${d.groupname}">Question type</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- End 2 panel -->
-
-
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 </div>
-
-</body>
-</html>

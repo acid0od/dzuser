@@ -4,11 +4,11 @@ import net.odtel.usercheck.domain.RadiusGroup;
 import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.repository.RadiusGroupRepository;
 import net.odtel.usercheck.service.RadiusGroupService;
+import net.odtel.usercheck.web.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service(value = "radiusGroupService")
@@ -26,6 +26,16 @@ public class RadiusGroupServiceImpl implements RadiusGroupService {
     @Override
     public List<RadiusGroup> findAllDistinctByGroupreplyname() {
         return radiusGroupRepository.findAllDistinctByGroupreplyname();
+    }
+
+    @Override
+    public Page<RadiusGroup> findAll(Integer pageNumber, Integer limit) {
+        return radiusGroupRepository.findAll(pageNumber, limit);
+    }
+
+    @Override
+    public Page<RadiusGroup> findAllByGroupName(String groupName, Integer pageNumber, Integer limit) {
+        return radiusGroupRepository.findAllByGroupName(groupName,pageNumber,limit);
     }
 
     @Override

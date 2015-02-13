@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service(value = "radiusUserService")
 @Transactional
@@ -26,7 +27,7 @@ public class RadiusUserServiceImpl implements RadiusUserService {
     @Override
     public RadiusUser findOne(Long id) {
 
-        return  repository.findOne(id);
+        return repository.findOne(id);
     }
 
     @Override
@@ -36,12 +37,12 @@ public class RadiusUserServiceImpl implements RadiusUserService {
 
     @Override
     public Page<RadiusUser> findAllWithRange(Integer pageNumber, Integer limit) {
-        return  repository.findAllWithRange(pageNumber, limit);
+        return repository.findAllWithRange(pageNumber, limit);
     }
 
     @Override
     public Page<RadiusUser> findAllOfOrderWithRange(String someLogin, Integer pageNumber, Integer limit) {
-        return  repository.findAllOfOrderWithRange(someLogin, pageNumber, limit);
+        return repository.findAllOfOrderWithRange(someLogin, pageNumber, limit);
     }
 
     @Override
@@ -58,9 +59,18 @@ public class RadiusUserServiceImpl implements RadiusUserService {
     public void update(RadiusUser radiusUser) {
         if (radiusUser.getRadiusUserValues() != null) {
             List<RadiusUserValue> values = radiusUser.getRadiusUserValues();
+            Set<Long> radiusUserLongSet = radiusUserValueRepository.getSetOfUserId(radiusUser.getUsername());
             for (RadiusUserValue value : values) {
+                if (value.getId() != null && value.getId() > 0) {
+                    radiusUserLongSet.remove(value.getId());
+                }
                 value.setUsername(radiusUser.getUsername());
                 radiusUserValueRepository.createOrUpdate(value);
+            }
+            if (radiusUserLongSet.size() > 0) {
+                for (Long l : radiusUserLongSet) {
+                    radiusUserValueRepository.remove(l);
+                }
             }
         }
 

@@ -1,15 +1,31 @@
 package net.odtel.usercheck.repository.impl;
 
+import net.odtel.usercheck.domain.RadiusAttribute;
+import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.repository.RadiusUserValueRepository;
+import net.odtel.usercheck.web.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Repository(value = "radiusUserValueRepository")
 @Transactional
 public class RadiusUserValueRepositoryImpl implements RadiusUserValueRepository {
+
+    public static final String INSERT_INTO_RUSERREPLY = "insert into ruserreply (userreplyid, userreplyname, userreplyattr, userreplyop, userreplyval) VALUES (?,?,?,?,?)";
+    public static final String UPDATE_RUSERREPLY = "update ruserreply set userreplyname = ? , userreplyattr = ? , userreplyop = ? , userreplyval = ? where userreplyid = ?";
+    public static final String DELETE_FROM_RUSERREPLY = "delete from ruserreply where userreplyid = ?";
+    public static final String NEXTVAL_RUSERREPLY = "select nextval('ruserreply_userreplyid_seq'::regclass)";
+    private static final String SEARCH_USERS_VALUES_FROM_USERSREPLAY = "select userreplyid, userreplyname, userreplyattr, userreplyop, userreplyval from ruserreply where userreplyname = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -17,28 +33,37 @@ public class RadiusUserValueRepositoryImpl implements RadiusUserValueRepository 
     @Override
     public RadiusUserValue createNewRecord(RadiusUserValue radiusUserValue) {
         Long id = nextId();
-        String s = radiusUserValue.getValue().trim();
-        StringBuilder builder = new StringBuilder();
-
-        if (!s.startsWith("\"")) {
-            builder.append("\"").append(s);
-        }  else {
-            builder.append(s);
-        }
-
-        if (!s.endsWith("\"")) {
-            builder.append("\"");
-        }
-
         this.jdbcTemplate.update(
-                "insert into ruserreply (userreplyid, userreplyname, userreplyattr, userreplyop, userreplyval) VALUES (?,?,?,?,?)",
+                INSERT_INTO_RUSERREPLY,
                 id,
                 radiusUserValue.getUsername(),
                 radiusUserValue.getAttribute().getValue(),
                 radiusUserValue.getOperator().getValue(),
-                builder.toString());
-
+                StringUtils.setQuates(radiusUserValue.getValue())
+        );
         return radiusUserValue;
+    }
+
+    @Override
+    public Set<Long> getSetOfUserId(String radiusUser) {
+        List<Long> longs = this.jdbcTemplate.query(SEARCH_USERS_VALUES_FROM_USERSREPLAY,
+                new Object[]{radiusUser},
+                new RowMapper<Long>() {
+                    @Override
+                    public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getLong("userreplyid");
+                    }
+                });
+        Set<Long> a = new HashSet<>();
+        a.addAll(longs);
+        return a;
+    }
+
+    @Override
+    public void remove(Long id) {
+        this.jdbcTemplate.update(
+                DELETE_FROM_RUSERREPLY,
+                id);
     }
 
     @Override
@@ -56,55 +81,28 @@ public class RadiusUserValueRepositoryImpl implements RadiusUserValueRepository 
     }
 
     private void update(RadiusUserValue value) {
-        String s = value.getValue().trim();
-        StringBuilder builder = new StringBuilder();
-
-        if (!s.startsWith("\"")) {
-            builder.append("\"").append(s);
-        } else {
-            builder.append(s);
-        }
-
-        if (!s.endsWith("\"")) {
-            builder.append("\"");
-        }
-
         this.jdbcTemplate.update(
-                "insert ruserreply set userreplyname = ? , userreplyattr = ? , userreplyop = ? , userreplyval = ? where userreplyid = ?",
+                UPDATE_RUSERREPLY,
                 value.getUsername(),
                 value.getAttribute().getValue(),
                 value.getOperator().getValue(),
-                builder.toString(),
+                StringUtils.setQuates(value.getValue()),
                 value.getId());
 
     }
 
     private void create(RadiusUserValue value) {
-        String s = value.getValue().trim();
-        StringBuilder builder = new StringBuilder();
-
-        if (!s.startsWith("\"")) {
-            builder.append("\"").append(s);
-        }  else {
-            builder.append(s);
-        }
-
-        if (!s.endsWith("\"")) {
-            builder.append("\"");
-        }
-
         this.jdbcTemplate.update(
-                "insert into ruserreply (userreplyid, userreplyname, userreplyattr, userreplyop, userreplyval) VALUES (?,?,?,?,?)",
+                INSERT_INTO_RUSERREPLY,
                 value.getId(),
                 value.getUsername(),
                 value.getAttribute().getValue(),
                 value.getOperator().getValue(),
-                builder.toString());
-
+                StringUtils.setQuates(value.getValue()));
     }
 
     private Long nextId() {
-        Long id = this.jdbcTemplate.queryForObject("select nextval('ruserreply_userreplyid_seq'::regclass)", Long.class);
+        Long id = this.jdbcTemplate.queryForObject(NEXTVAL_RUSERREPLY, Long.class);
         return id;
     }
 

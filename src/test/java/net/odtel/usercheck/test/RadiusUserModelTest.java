@@ -4,6 +4,7 @@ import net.odtel.usercheck.domain.RadiusAttribute;
 import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.domain.RadiusUserValue;
+import net.odtel.usercheck.web.utils.StringUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -48,9 +49,9 @@ public class RadiusUserModelTest {
     @Test
     public void simpleRadiusUserPageTest() {
         String s = "7";
-        int limit = 12;
+        int limit = 23;
 
-        int startIndex = (s == null) ? 0 : Integer.parseInt(s) + 1;
+        int startIndex = (s == null) ? 1 : Integer.parseInt(s) + 1;
 
         int endIndex = startIndex + limit - 1 ;
         int step = (limit > 10) ? (int) Math.ceil(limit / 10) + 1: limit;
@@ -63,5 +64,12 @@ public class RadiusUserModelTest {
 
             System.out.println("+ [" + start + " " + end + "] " + (end - start + 1) );
         }
+    }
+
+    @Test
+    public  void stringTest () {
+        String s = StringUtils.setQuates("dkdlskk slssddlks dlskkdl ksk    klklklkl klk\"");
+
+        System.out.println("[" + s + "]");
     }
 }
