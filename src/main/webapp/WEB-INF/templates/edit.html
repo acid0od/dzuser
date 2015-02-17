@@ -1,0 +1,118 @@
+<html>
+<head>
+    <style>
+        body {
+        padding: 10px;
+        }
+        .verb.input {
+        background-color: "#011"
+        }
+        form.st {
+        background: #fafafa;
+        padding: 20px;
+        width: 420px;
+        margin: 0 auto;
+        border: 1px solid #ffe2e3;
+        }
+
+        form input {
+        width: 55%;
+        padding: 5px;
+        border: 1px solid #d4d4d4;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 4px;
+
+        line-height: 1.2em;
+        float: right;
+
+        /* some box shadow sauce :D */
+        box-shadow: inset 0px 2px 2px #ececec;
+        }
+
+        form input.shot {
+        width: 25%;
+        padding: 5px;
+        border: 1px solid #d4d4d4;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 4px;
+
+        line-height: 1.2em;
+        float: left;
+
+        /* some box shadow sauce :D */
+        box-shadow: inset 0px 2px 2px #ececec;
+        }
+
+
+        form label, form input {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        }
+
+        form label {
+        font-weight: normal;
+        //background: linear-gradient(#f1f1f1, #e2e2e2);
+        padding: 5px 10px;
+        color: #444;
+
+        border: 0px solid #d4d4d4;
+        /* lets remove the right border */
+        border-right: 0;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
+
+        line-height: 1.2em;
+        width: 45%;
+
+        /* takes the width properly now and also the
+        spacing between the label and input field got removed. */
+        float: left;
+
+        text-align: right;
+        font-size: small;
+        cursor: pointer;
+        }
+
+        form div {
+        /* Float containment */
+        overflow: hidden;
+        }
+
+    </style>
+</head>
+
+<body>
+<h2>Hello world</h2>
+
+<p>Repeated Action</p>
+
+<p>Fact or Generalization</p>
+
+<p>Scheduled action in the Near future</p>
+
+<p>Now non-continuous verb</p>
+
+<form class="st">
+    <div>
+        <label for="id1">Very long label:</label>
+        <input type="text" id="id1" name="id1" value="id1"/>
+    </div>
+    <div>
+        <label for="id2">Label:</label>
+        <input type="text" id="id2" name="id2" value="id2" class="shot"/>
+    </div>
+    <div>
+        <label for="id3">Label-for all:</label>
+        <input type="text" id="id3" name="id3" value="id3"/>
+    </div>
+    <div>
+
+        <label for="id4">Very very very long label:</label>
+        <input type="text" id="id4" name="id4" value="id4"/>
+    </div>
+    <button>Submit</button>
+
+</form>
+</body>
+</html>
