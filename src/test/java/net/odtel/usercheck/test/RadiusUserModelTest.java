@@ -6,17 +6,14 @@ import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.web.utils.StringUtils;
+import org.hibernate.sql.ordering.antlr.OrderingSpecification;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -82,14 +79,15 @@ public class RadiusUserModelTest {
     public void stringTest() {
         String s = StringUtils.setQuates("dkdlskk slssddlks dlskkdl ksk    klklklkl klk\"");
         System.out.println("[" + s + "]");
+        System.out.print("[" + Math.floor(200.0082) + "]");
     }
 
     @Test
     public void unZipFile() {
         byte[] b = new byte[1024];
-        Set<String> list = new HashSet<>();
+        Map<String, Integer> list = new HashMap<>();
         try {
-            FileInputStream fim = new FileInputStream("2.zip");
+            FileInputStream fim = new FileInputStream("/home/acid/2.zip");
             ZipInputStream zipInputStream = new ZipInputStream(fim);
             ZipEntry zipEntry;
             while ((zipEntry = zipInputStream.getNextEntry()) != null) {
@@ -101,7 +99,7 @@ public class RadiusUserModelTest {
                     int size = zipInputStream.read(b, 0, 1024);
                     if (size > 0) {
 
-                         am = testByte(list, am, b);
+                        am = testByte(list, am, b);
 
                     }
                 }
@@ -111,30 +109,31 @@ public class RadiusUserModelTest {
             e.printStackTrace();
         }
 
-        List<String> s1 = new ArrayList<>(list);
-        Collections.sort(s1);
-        for(String s: s1) {
-            System.out.println("[" +s+ "]");
+        Map<String, Integer> map = sortByValue(list);
+
+        for (String s : map.keySet()) {
+
+            System.out.println("[" + s + "]" + map.get(s));
         }
     }
 
-    public byte[] testByte (Set<String> list, byte[] am, byte[] a) {
-        byte[] c ;
-        if (am != null ) {
+    public byte[] testByte(Map<String, Integer> list, byte[] am, byte[] a) {
+        byte[] c;
+        if (am != null) {
             int size = am.length + a.length;
             int j = 0;
             c = new byte[size];
-            for (int i = 0 ; i < am.length; i++){
+            for (int i = 0; i < am.length; i++) {
                 c[i] = am[i];
             }
-            for (int i = 0 ; i < a.length; i++){
-                c[j+i] = a[i];
+            for (int i = 0; i < a.length; i++) {
+                c[j + i] = a[i];
             }
 
-        } else  {
+        } else {
             int size = a.length;
             c = new byte[size];
-            for (int i = 0 ; i < a.length; i++){
+            for (int i = 0; i < a.length; i++) {
                 c[i] = a[i];
             }
         }
@@ -144,19 +143,24 @@ public class RadiusUserModelTest {
         boolean end = true;
         int j = 0;
 
-        for (int i = 0 ; i < c.length - 1; i++) {
+        for (int i = 0; i < c.length - 1; i++) {
             if (isSpacedChar(c[i]) && !isSpacedChar(c[i + 1])) {
-                if (end){
+                if (end) {
                     begin = true;
                     end = false;
                     j = i + 1;
                 }
             }
-            if (!isSpacedChar(c[i]) && isSpacedChar(c[i+1])) {
+            if (!isSpacedChar(c[i]) && isSpacedChar(c[i + 1])) {
                 if (begin) {
                     begin = false;
                     end = true;
-                    list.add(new String(c,j,i - j + 1).toLowerCase());
+                    String key = new String(c, j, i - j + 1).toLowerCase();
+                    if (list.containsKey(key)) {
+                        list.put(key, list.get(key) + 1);
+                    } else {
+                        list.put(key, 1);
+                    }
                 }
 
             }
@@ -164,25 +168,43 @@ public class RadiusUserModelTest {
 
         if (begin) {
             b = new byte[c.length - j];
-            for (int i = 0; i < b.length; i++){
-                b[i] = c[j+i];
+            for (int i = 0; i < b.length; i++) {
+                b[i] = c[j + i];
             }
         }
 
+        Math.random();
         return b;
 
     }
 
-    private boolean isSpacedChar(byte c){
+    private boolean isSpacedChar(byte c) {
         return c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\0' || c == '.' || c == ':' || c == '}' || c == '{'
                 || c == ')' || c == '(' || c == '"' || c == ';' || c == '/' || c == '@' || c == '?' || c == '<' || c == '>'
-                || c == '-' || c == ',' || c == '\'' || c == '$' || c == '=' || c == '!' || c == '*' || c == '+' || c == '&';
+                || c == '-' || c == ',' || c == '$' || c == '=' || c == '!' || c == '*' || c == '+' || c == '&';
     }
-
 
     private List<String> getStringArray() {
         List<String> list = new ArrayList<>();
 
         return list;
     }
+
+    private static Map sortByValue(Map map) {
+        List list = new LinkedList(map.entrySet());
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o1)).getValue())
+                        .compareTo(((Map.Entry) (o2)).getValue());
+            }
+        });
+
+        Map result = new LinkedHashMap();
+        for (Iterator it = list.iterator(); it.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) it.next();
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
+
 }
