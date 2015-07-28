@@ -6,6 +6,7 @@ import net.odtel.usercheck.domain.RadiusOperation;
 import net.odtel.usercheck.domain.RadiusUser;
 import net.odtel.usercheck.domain.RadiusUserValue;
 import net.odtel.usercheck.web.utils.StringUtils;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.sql.ordering.antlr.OrderingSpecification;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -39,8 +40,15 @@ public class RadiusUserModelTest {
 
     @Test
     public void simpleRadiusUserModelTest() {
-        assertEquals(radiusUser.getPasswordType().getValue(), "Cleartext-Password");
-        assertEquals(radiusUser.getPasswordOperation().getValue(), ":=");
+     /*   assertEquals(radiusUser.getPasswordType().getValue(), "Cleartext-Password");
+        assertEquals(radiusUser.getPasswordOperation().getValue(), ":=");*/
+        /*Integer a = 1000, b = 1000;
+        Integer c = 100, d = 100;
+        System.out.println(a == b);
+        System.out.println(c == d );
+        */
+        String str = "sdkjds {+ HElllo +}     opeoepopeo";
+        System.out.println(" [" + str.substring(str.indexOf("{"), str.lastIndexOf("}")) + "]");
     }
 
     @Test
@@ -74,7 +82,7 @@ public class RadiusUserModelTest {
         }
     }
 */
-
+/*
     @Test
     public void stringTest() {
         String s = StringUtils.setQuates("dkdlskk slssddlks dlskkdl ksk    klklklkl klk\"");
@@ -207,4 +215,15 @@ public class RadiusUserModelTest {
         return result;
     }
 
+
+    public void s01Test () {
+        int a[] = new int[] {120, 80, 25, 20, 30};
+        Arrays.sort(a);
+
+        for (int i = 0 ; i < a.length; i++){
+            System.out.println("a=[" + a[i] + "]");
+        }
+
+    }
+    */
 }

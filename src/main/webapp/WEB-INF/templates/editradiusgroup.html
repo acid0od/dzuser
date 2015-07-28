@@ -38,7 +38,8 @@
             <div class="panel-body">
                 <div class="row">
 
-                    <form class="form-horizontal" role="form" th:action="@{/updateradiususer.html}"  th:object="${radiusUser}" method="post">
+                    <form class="form-horizontal" role="form" th:action="@{/updateradiususer.html}"
+                          th:object="${radiusUser}" method="post">
                         <input type="hidden" th:field="*{id}"/>
                         <input type="hidden" th:field="*{passwordType}"/>
                         <input type="hidden" th:field="*{passwordOperation}"/>
@@ -124,11 +125,14 @@
 
 
                             <div class="col-md-8">
-                                <p> Примеры пользовательских аттрибутов</p>
+                                <p> Example: How use users attribute. </p>
 
                                 <p> Cisco-AVPair <span>+=</span> "ip:addr-pool=zhov_sr"</p>
+
                                 <p> Mikrotik-Rate-Limit <span>+=</span>"1M 3M 768k 128 8 1M" </p>
+
                                 <p> Указать IP адрес</p>
+
                                 <p> Framed-IP-Address <span>:=</span> 195.138.166.152 </p>
 
                             </div>
@@ -144,6 +148,6 @@
 
                         </div>
 
+                </div>
+            </div>
         </div>
-    </div>
-</div>

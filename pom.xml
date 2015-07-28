@@ -15,6 +15,7 @@
         <org.thymeleaf-version>2.1.2.RELEASE</org.thymeleaf-version>
         <org.thymeleaf.extras.springsecurity3-version>2.1.1.RELEASE</org.thymeleaf.extras.springsecurity3-version>
         <validation-api.version>1.1.0.Final</validation-api.version>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
     <name>usercheck Maven Webapp</name>
@@ -246,6 +247,20 @@
             <scope>test</scope>
         </dependency>
 
+<!--
+        <dependency>
+            <groupId>javax.interceptor</groupId>
+            <artifactId>javax.interceptor-api</artifactId>
+            <version>3.1</version>
+        </dependency>
+-->
+
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>2.3.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>dzuser</finalName>
@@ -314,6 +329,7 @@
                         </connector>
                     </connectors>
                     <stopKey>c</stopKey>
+                    <stopPort/>
                 </configuration>
             </plugin>
             <plugin>
@@ -321,6 +337,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.18</version>
             </plugin>
+
         </plugins>
     </build>
 

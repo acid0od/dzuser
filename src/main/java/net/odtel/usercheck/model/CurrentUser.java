@@ -3,6 +3,7 @@ package net.odtel.usercheck.model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -111,7 +112,7 @@ public class CurrentUser implements Serializable {
 
         Date date = new Date(dateStart * 1000);
         //SimpleDateFormat sdf = new SimpleDateFormat("EEEE,MMMM d,yyyy h:mm,a");
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss, MMMM dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss, MMMM dd", Locale.getDefault());
         return (sdf.format(date));
     }
 
