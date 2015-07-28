@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap-united.min.css" th:href="@{/resources/bootstrap-united.min.css}"
+          rel="stylesheet"/>
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+            margin-bottom: 10px;
+        }
+
+        .form-signin .checkbox {
+            font-weight: normal;
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+
+        .form-signin input[type="login"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1><i class="fa fa-ban red"></i>Access deny</h1>
+
+        <p class="lead">Sorry! You don't have access permissions for that on <em><span id="display-domain"></span></em>.
+        </p>
+
+        <p>
+            <a onclick="javascript:checkSite();" class="btn btn-default btn-lg green">Take Me To The Homepage</a>
+        </p>
+    </div>
+</div>
+<div class="container">
+    <div class="body-content">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>What happened?</h2>
+
+                <p class="lead">A 403 error status indicates that you don't have permission to access the file or page.
+                    In general, web servers and websites have directories and files that are not open to the public web
+                    for security reasons.</p>
+            </div>
+            <div class="col-md-6">
+                <h2>What can I do?</h2>
+
+                <p class="lead">If you're a site vistor</p>
+
+                <p>Please use your browsers back button and check that you're in the right place. If you need immediate
+                    assistance, please send us an email instead.</p>
+
+                <p class="lead">If you're the site owner</p>
+
+                <p>Please check that you're in the right place and get in touch with your website provider if you
+                    believe this to be an error.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../../../resources/js/jquery.min.js"></script>
+<script src="../../../resources/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function checkSite() {
+        var currentSite = window.location.hostname + ':' + window.location.port + '/';
+        window.location = "http://" + currentSite;
+    }
+</script>
+</body>
+</html>
+

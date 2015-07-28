@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Error page</title>
+</head>
+<body>
+<h1 th:text="${errorCode}">500</h1>
+
+<p th:text="${errorMessage}">java.lang.NullPointerException</p>
+</body>
+</html>

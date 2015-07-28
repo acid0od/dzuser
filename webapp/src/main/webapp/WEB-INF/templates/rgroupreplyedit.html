@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap-united.min.css" th:href="@{/resources/bootstrap-united.min.css}"
+          rel="stylesheet"/>
+    <style>
+
+        .input-group {
+            float: left;
+        }
+
+        .input-group:first-child {
+            margin-left: 15px;
+        }
+
+        .input-group:first-child > .input {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        .input-group:last-child > .input {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div th:replace="header :: menubar (${searchRequest}, rgroupreplyedit.html) "/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-header">
+                <h3 id="forms" th:text="#{rgroupreply.form.title}">Location form edition.</h3>
+            </div>
+
+            <form class="form-horizontal" method="POST" th:action="@{/rgroupreplyedit.html}" th:object="${pair}"
+                  role="form">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error has-feedback ' : 'form-group'">
+                            <label for="name" class="col-lg-2 control-label"
+                                   th:text="#{form.Location.name.label}">Name</label>
+
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="name" placeholder="Location"
+                                       th:field="*{name}"/>
+                            <span class="help-block" th:if="${#fields.hasErrors('name')}"
+                                  th:text="${#fields.errors('name')}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-8 btn-group" style="margin: 9px 0;">
+                                <button type="submit" class="btn btn-info active" name="addValues"
+                                        th:text="#{form.rgroupreply.add.label}">
+                                    Submit
+                                </button>
+                                <button type="submit" class="btn btn-success btn-default active"
+                                        th:text="#{form.rgroupreply.sumbit.label}">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="panel panel-info" th:each="row, rowStat : *{list}">
+                            <div class="panel-heading">
+                                <span th:text="#{rgroupreply.form.attribute.label}">Panel with panel-info class</span>
+                                <button type="submit" name="removeValue" th:value="${rowStat.index}" class="close"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                            <input type="hidden" th:field="*{list[__${rowStat.index}__].id}"/>
+
+                            <div class="panel-body">
+                                <div class="form-group"
+                                     th:class="${#fields.hasErrors('list[__${rowStat.index}__]')} ? 'form-group has-error has-feedback ' : 'form-group'">
+                                <span class="input-group">
+                                    <select class="form-control input" style="width: 160px;"
+                                            th:field="*{list[__${rowStat.index}__].groupreplyattr}">
+                                        <option th:each="value : ${radiusAttribute}"
+                                                th:value="${value}"
+                                                th:text="${value.value}">Value
+                                        </option>
+                                    </select>
+                                </span>
+                                <span class="input-group">
+                                    <select class="form-control input" style="width: 70px;"
+                                            th:field="*{list[__${rowStat.index}__].groupreplyop}">
+                                        <option th:each="value : ${radiusOperation}"
+                                                th:value="${value}"
+                                                th:text="${value.value}">Value
+                                        </option>
+                                    </select>
+                                </span>
+                                <span class="input-group col-lg-8">
+                                    <input class="form-control input" type="text" placeholder="Enter a time"
+                                           th:field="*{list[__${rowStat.index}__].groupreplyval}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('list[__${rowStat.index}__]')}"
+                                      th:text="${#fields.errors('list[__${rowStat.index}__]')}"/>
+
+                                </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group has-error has-feedback"  th:if="${#fields.hasErrors('list')}">
+                            <span class="help-block" th:if="${#fields.hasErrors('list')}"  th:text="${#fields.errors('list')}"/>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../../../resources/js/jquery.min.js"></script>
+<script src="../../../resources/js/bootstrap.min.js"></script>
+</body>
+</html>

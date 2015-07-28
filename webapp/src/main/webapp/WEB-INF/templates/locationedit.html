@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap-united.min.css" th:href="@{/resources/bootstrap-united.min.css}"
+          rel="stylesheet"/>
+</head>
+
+<body>
+
+<div th:replace="header :: menubar (${searchRequest}, locationedit.html) "/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-header">
+                <h3 id="forms" th:text="#{form.Location.title}">Location form edition.</h3>
+            </div>
+
+            <form class="form-horizontal" method="POST" th:action="@{/locationedit.html}" th:object="${location}"
+                  role="form">
+                <div class="row">
+                    <div class="col-lg-offset-2 col-lg-6">
+                        <input type="hidden" th:field="*{id}"/>
+
+                        <div class="form-group"
+                             th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+                            <label for="name" class="col-lg-2 control-label"
+                                   th:text="#{form.Location.name.label}">Name</label>
+
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="name" placeholder="Location"
+                                       th:field="*{name}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('name')}"
+                                      th:text="${#fields.errors('name')}"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-offset-6 col-lg-6 form-group">
+                            <button type="submit" class="btn btn-success" th:text="#{form.Location.sumbit.label}">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../../../resources/js/jquery.min.js"></script>
+<script src="../../../resources/js/bootstrap.min.js"></script>
+</body>
+</html>

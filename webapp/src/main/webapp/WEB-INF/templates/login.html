@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap-united.min.css" th:href="@{/resources/bootstrap-united.min.css}"
+          rel="stylesheet"/>
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+            margin-bottom: 10px;
+        }
+
+        .form-signin .checkbox {
+            font-weight: normal;
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+
+        .form-signin input[type="login"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <form class="form-signin" th:action="@{/j_spring_security_check}" method="post">
+        <h1 class="form-signin-heading" th:text="#{form.login.title}">Please sign in</h1>
+        <label for="j_username" class="sr-only" th:text="#{form.login.username.label}">Email address</label>
+        <input type="login" id="j_username" name="j_username" class="form-control" placeholder="Login"
+               required="required"
+               autofocus="autofocus"/>
+        <label for="j_password" class="sr-only" th:text="#{form.login.password.label}">Password</label>
+        <input type="password" name="j_password" id="j_password" class="form-control" placeholder="Password"
+               required="required"/>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me" th:text="#{form.login.remember.label}"/>
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{form.login.submit.label}">Sign in
+        </button>
+    </form>
+</div>
+<!-- /container -->
+
+
+<!--
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-header">
+                <h2 id="forms" th:text="#{form.login.title}">Location form edition.</h2>
+            </div>
+
+
+            <p th:if="${loginError}">Wrong user or password</p>
+
+            <form class="form-horizontal" th:action="@{/j_spring_security_check}" method="post">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-lg-offset-2 col-lg-6">
+                            <div class="form-group">
+                                <label for="j_username" class="col-lg-3 control-label"
+                                       th:text="#{form.login.username.label}">Name</label>
+
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="j_username" name="j_username"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="j_password" class="col-lg-3 control-label"
+                                       th:text="#{form.login.password.label}">Name</label>
+
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="j_password" name="j_password"/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-offset-6 col-lg-6 form-group">
+                                <button type="submit" class="btn btn-success" th:text="#{form.login.submit.label}">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+-->
+
+
+<script src="../../../resources/js/jquery.min.js"></script>
+<script src="../../../resources/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
