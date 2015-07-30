@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence   http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="punit">
+        <class>net.odtel.dzuser.api.model.Location</class>
+        <class>net.odtel.dzuser.api.model.FailReject</class>
+        <class>net.odtel.dzuser.api.model.CurrentUser</class>
+        <class>net.odtel.dzuser.api.model.Accounting</class>
+        <class>net.odtel.dzuser.api.model.DialupUser</class>
+        <class>net.odtel.dzuser.api.model.Nas</class>
+        <class>net.odtel.dzuser.api.model.NasType</class>
+        <class>net.odtel.dzuser.api.model.RGroup</class>
+        <class>net.odtel.dzuser.api.model.RGroupReply</class>
+    </persistence-unit>
+
+</persistence>

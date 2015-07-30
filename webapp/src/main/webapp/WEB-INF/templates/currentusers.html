@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap-united.min.css" th:href="@{/resources/bootstrap-united.min.css}"
+          rel="stylesheet"/>
+</head>
+
+<body>
+
+<div th:replace="header :: menubar (${searchRequest}, currentusers.html) "/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-header">
+                <h3 id="tables">Users Online</h3>
+
+                <span class="label label-danger" th:text="${(page.number + 1) + '/' + page.totalPages}"></span>
+                <span class="label label-info" th:text="${'Показано с'}">Show from</span>
+                <span class="label label-primary" th:text="${(page.number*20+1)}"></span>
+                <span class="label label-info" th:text="${'по'}"></span>
+                <span class="label label-primary" th:text="${(page.number*20 + page.numberOfElements)}"></span>
+                <span class="label label-info" th:text="${'из всего найденного'}"></span>
+                <span class="label label-primary" th:text="${page.totalElements}">Show from</span>
+
+            </div>
+
+            <nav th:replace="utils :: pagination (${page}, 'currentusers.html')">&nbsp;</nav>
+
+            <div class="bs-component">
+                <form role="form" th:action="@{/currentusers.html}" th:object="${searchRequest}" method="post">
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>N</th>
+                            <!-- and order eq 'false' -->
+                            <div th:if="${sort eq 'userName'}">
+                                <div th:if="${order}">
+                                    <th>User Name
+                                        <a th:href="@{/currentusers.html(page=${page.number},sort=userName,order=false)}">
+                                            <i class="glyphicon glyphicon-sort-by-alphabet-alt"></i>
+                                        </a>
+                                    </th>
+                                </div>
+                                <div th:unless="${order}">
+                                    <th>User Name
+                                        <a th:href="@{/currentusers.html(page=${page.number},sort=userName,order=true)}">
+                                            <i class="glyphicon glyphicon-sort-by-alphabet"></i>
+                                        </a>
+                                    </th>
+                                </div>
+                            </div>
+                            <div th:if="${sort != 'userName' or sort == NULL}">
+                                <th>
+                                    <a th:href="@{/currentusers.html(page=${page.number},sort=userName,order=false)}">
+                                        User Name
+                                    </a>
+                                </th>
+                            </div>
+                            <th>IP</th>
+                            <th>NAS</th>
+                            <th>NAS IP</th>
+                            <div th:if="${sort eq 'dateStart'}">
+                                <div th:if="${order}">
+                                    <th>Start Time
+                                        <a th:href="@{/currentusers.html(page=${page.number},sort=dateStart,order=false)}">
+                                            <i class="glyphicon glyphicon-sort-by-alphabet-alt"></i>
+                                        </a>
+                                    </th>
+                                </div>
+                                <div th:unless="${order}">
+                                    <th>Start Time
+                                        <a th:href="@{/currentusers.html(page=${page.number},sort=dateStart,order=true)}">
+                                            <i class="glyphicon glyphicon-sort-by-alphabet"></i>
+                                        </a>
+                                    </th>
+                                </div>
+                            </div>
+                            <div th:if="${sort != 'dateStart'}">
+                                <th>
+                                    <a th:href="@{/currentusers.html(page=${page.number},sort=dateStart,order=false)}">
+                                        Start Time
+                                    </a>
+                                </th>
+                            </div>
+                            <th>Stop Time</th>
+                            <th>&nbsp;
+                                <a th:href="@{/currentusers.html(page=${page.number},sort=userName,order=true)}">
+                                    <i class="glyphicon glyphicon-sort-by-alphabet-alt"></i>
+                                </a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="currentUser, rowStat : ${page.content}" th:class="${rowStat.odd} ? 'odd'">
+                            <td th:text="${page.number} * 20 + ${rowStat.count}">N</td>
+                            <td th:text="${currentUser.userName}">Onions</td>
+                            <td th:text="${currentUser.userIP}">2.41</td>
+                            <td th:text="${currentUser.nasid.description}">2.41</td>
+                            <td th:text="${currentUser.nasid.ip}">2.41</td>
+                            <td th:text="${currentUser.dateStartString}">2.41</td>
+                            <td th:text="${currentUser.dateDurationString}">2.41</td>
+                            <td>
+
+                                <a class="btn-mini" th:href="@{'/statistics/' + ${currentUser.userName} + '.html'}">
+                                    <i class="glyphicon glyphicon-edit"></i>
+                                </a>
+
+                                <a class="btn-mini" href="#" data-toggle="modal" data-target="#confirm-delete"
+                                   th:attr="data-href='/currentusers/delete/' + ${currentUser.userName} + '.html',data-whatever=${currentUser.userName}">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <nav th:replace="utils :: pagination (${page}, 'currentpage.html')">&nbsp;</nav>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">A you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p><span class="modal-text"></span> &hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script src="../../../resources/js/jquery.min.js"></script>
+<script src="../../../resources/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('#confirm-delete').on('show.bs.modal', function (e) {
+        var recipient = $(e.relatedTarget).data('whatever')
+        var modal = $(this)
+        modal.find('.modal-title').text('A you sure delete ' + recipient + '?')
+        modal.find('.modal-text').text('Kill online user - ' + recipient + '?')
+        modal.find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+</body>
+</html>
+

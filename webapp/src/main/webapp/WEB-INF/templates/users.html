@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap.min.css" th:href="@{/resources/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div th:replace="header :: menubar"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-header">
+                <h1 id="tables">Tables</h1>
+            </div>
+
+            <nav th:replace="utils :: pagination (${users}, 'users.html')">&nbsp;</nav>
+
+            <div class="bs-component">
+                <form role="form" th:action="@{/users.html}" th:object="${searchRequest}" method="post">
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                        <tr>
+                            <th>N</th>
+                            <th>ID</th>
+                            <th>LOGIN</th>
+                            <th>OPTIONS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="row,rowStat : ${users.listData}" th:class="${rowStat.odd}? 'odd'">
+                            <td th:text="${rowStat.count} + (${users.currentPage} - 1) * ${users.limit}">N</td>
+                            <td th:text="${row.id}">Onions</td>
+                            <td th:text="${row.username}">2.41</td>
+                            <td>
+                                <button type="submit" name="editRadiusUser" th:value="${row.id}"
+                                        class="btn btn-primary btn-xs"
+                                        aria-label="Left Align"><span
+                                        class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Edit
+                                </button>
+                                <button type="submit" name="removeRadiusUser" th:value="${row.id}"
+                                        class="btn btn-primary btn-xs"
+                                        aria-label="Left Align"><span
+                                        class="glyphicon glyphicon-remove" aria-hidden="true"></span>Remove
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="../../../resources/js/jquery.min.js"></script>
+<script src="../../../resources/js/bootstrap.min.js"></script>
+</body>
+</html>

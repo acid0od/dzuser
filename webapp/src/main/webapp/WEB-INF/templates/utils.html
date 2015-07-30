@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> All Radius Users </title>
+    <link href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link href="../../../resources/bootstrap-united.min.css" th:href="@{/resources/bootstrap-united.min.css}"
+          rel="stylesheet"/>
+</head>
+
+<body>
+
+<nav th:fragment="pagination (page,currentpage)" th:if="${page.totalPages} > 1">
+
+    <ul class="pagination pagination-sm">
+        <!--  First button -->
+        <li th:unless="${page.isFirst()}" class="previous">
+            <a th:href="@{${currentusers}(page=0,sort=${sort},order=${order})}">
+                &laquo;Первая
+            </a>
+        </li>
+
+        <li th:if="${page.isFirst()}" class="previous disabled">
+            <a th:href="@{${currentusers}(page=${page.number},sort=${sort},order=${order})}">
+                &laquo;Первая
+            </a>
+        </li>
+
+        <!-- Prev -->
+        <li th:unless="${page.hasPrevious()}" class="previous disabled">
+            <a th:href="@{${currentusers}(page=${page.number},sort=${sort},order=${order})}">
+                &larr;Пред
+            </a>
+        </li>
+
+        <li th:if="${page.hasPrevious()}" class="previous">
+            <a th:href="@{${currentusers}(page=${page.number - 1 },sort=${sort},order=${order})}">
+                &larr;Пред
+            </a>
+        </li>
+        <!-- End Prev -->
+
+        <!-- Next -->
+        <li th:unless="${page.hasNext()}" class="next disabled">
+            <a th:href="@{${currentusers}(page=${page.number},sort=${sort},order=${order})}">
+                След&rarr;
+            </a>
+        </li>
+
+        <li th:if="${page.hasNext()}" class="next">
+            <a th:href="@{${currentusers}(page=${page.number + 1 },sort=${sort},order=${order})}">
+                След&rarr;
+            </a>
+        </li>
+        <!-- End Next -->
+
+        <li th:unless="${page.isLast()}" class="next">
+            <a th:href="@{${currentusers}(page=${page.totalPages - 1},sort=${sort},order=${order})}">
+                Последняя&raquo;
+            </a>
+        </li>
+
+        <li th:if="${page.isLast()}" class="next disabled">
+            <a th:href="@{${currentusers}(page=${page.number},sort=${sort},order=${order})}">
+                Последняя&raquo;
+            </a>
+        </li>
+    </ul>
+    <!-- End Paging -->
+
+</nav>
+</body>
+</html>

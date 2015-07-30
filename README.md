@@ -7,5 +7,3 @@ TODO
 2015.01.23
 Add ability to change users billing plan.
 
-
-
