@@ -11,6 +11,7 @@ public class SearchRequestModel implements Serializable {
     private String userName;
     private String userIP;
     private Nas nasid;
+    private String groupName;
 
     public NasType getType () {
         return type;
@@ -44,14 +45,12 @@ public class SearchRequestModel implements Serializable {
         this.nasid = nasid;
     }
 
-    @Override
-    public String toString () {
-        return "SearchRequestModel{" +
-                "type=" + type +
-                ", userName='" + userName + '\'' +
-                ", userIP='" + userIP + '\'' +
-                ", nasid=" + nasid +
-                '}';
+    public String getGroupName () {
+        return groupName;
+    }
+
+    public void setGroupName (String groupName) {
+        this.groupName = groupName;
     }
 
     @Override
@@ -64,7 +63,8 @@ public class SearchRequestModel implements Serializable {
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (userIP != null ? !userIP.equals(that.userIP) : that.userIP != null) return false;
-        return !(nasid != null ? !nasid.equals(that.nasid) : that.nasid != null);
+        if (nasid != null ? !nasid.equals(that.nasid) : that.nasid != null) return false;
+        return !(groupName != null ? !groupName.equals(that.groupName) : that.groupName != null);
 
     }
 
@@ -74,6 +74,18 @@ public class SearchRequestModel implements Serializable {
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (userIP != null ? userIP.hashCode() : 0);
         result = 31 * result + (nasid != null ? nasid.hashCode() : 0);
+        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString () {
+        return "SearchRequestModel{" +
+                "type=" + type +
+                ", userName='" + userName + '\'' +
+                ", userIP='" + userIP + '\'' +
+                ", nasid=" + nasid +
+                ", groupName='" + groupName + '\'' +
+                '}';
     }
 }

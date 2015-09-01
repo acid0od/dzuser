@@ -49,15 +49,27 @@ public class RUserServiceImpl implements RUserService {
 
         switch (searchPattern.getPar()) {
             case SearchPattern.FULL_NAME: {
-                return rUserRepository.findByUsername(searchPattern.getSearchPattern(), pageable);
+                if (searchRequest.getGroupName() == null) {
+                    return rUserRepository.findByUsername(searchPattern.getSearchPattern(), pageable);
+                } else {
+                    return rUserRepository.findByUsernameAndGroups(searchPattern.getSearchPattern(), searchRequest.getGroupName(), pageable);
+                }
             }
 
             case SearchPattern.PARTIAL_NAME: {
-                return rUserRepository.findByUsernameLike(searchPattern.getSearchPattern(), pageable);
+                if (searchRequest.getGroupName() == null) {
+                    return rUserRepository.findByUsernameLike(searchPattern.getSearchPattern(), pageable);
+                } else {
+                    return rUserRepository.findByUsernameLikeAndGroups(searchPattern.getSearchPattern(), searchRequest.getGroupName(), pageable);
+                }
             }
 
             default: {
-                return rUserRepository.findUsernameDistinct(pageable);
+                if (searchRequest.getGroupName() == null) {
+                    return rUserRepository.findUsernameDistinct(pageable);
+                } else {
+                    return rUserRepository.findByGroups(searchRequest.getGroupName(), pageable);
+                }
             }
         }
     }

@@ -27,7 +27,7 @@ public interface RUserRepository {
 
     void deleteUserAttribute (String userName);
 
-    void updateGroupForUser(RUserPair pair);
+    void updateGroupForUser (RUserPair pair);
 
     void deleteAllGroup (List<String> strings, String name);
 
@@ -36,4 +36,10 @@ public interface RUserRepository {
     void deleteUserAttribute (Long userAttrId);
 
     List<RUser> findUserAttributeByUsername (String name);
+
+    Page<RUser> findByUsernameAndGroups (String name, String group, Pageable pageable);
+
+    Page<RUser> findByUsernameLikeAndGroups (String name, String group, Pageable pageable);
+
+    Page<RUser> findByGroups (String group, Pageable pageable);
 }

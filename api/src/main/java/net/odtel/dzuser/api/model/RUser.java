@@ -51,6 +51,14 @@ public class RUser implements Serializable {
     @Transient
     private String tableName;
 
+    @Transient
+    private String groups;
+
+    public RUser () {
+        this.userop = RadiusOperation.EQUALS_REGEXP;
+        this.userattr = RadiusAttribute.FRAMED_MTU;
+    }
+
     public Long getId () {
         return id;
     }
@@ -99,9 +107,12 @@ public class RUser implements Serializable {
         this.tableName = tableName;
     }
 
-    public RUser () {
-        this.userop = RadiusOperation.EQUALS_REGEXP;
-        this.userattr = RadiusAttribute.FRAMED_MTU;
+    public String getGroups () {
+        return groups;
+    }
+
+    public void setGroups (String groups) {
+        this.groups = groups;
     }
 
     @Override
@@ -116,7 +127,8 @@ public class RUser implements Serializable {
         if (userattr != rUser.userattr) return false;
         if (userop != rUser.userop) return false;
         if (userval != null ? !userval.equals(rUser.userval) : rUser.userval != null) return false;
-        return !(tableName != null ? !tableName.equals(rUser.tableName) : rUser.tableName != null);
+        if (tableName != null ? !tableName.equals(rUser.tableName) : rUser.tableName != null) return false;
+        return !(groups != null ? !groups.equals(rUser.groups) : rUser.groups != null);
 
     }
 
@@ -128,6 +140,7 @@ public class RUser implements Serializable {
         result = 31 * result + (userop != null ? userop.hashCode() : 0);
         result = 31 * result + (userval != null ? userval.hashCode() : 0);
         result = 31 * result + (tableName != null ? tableName.hashCode() : 0);
+        result = 31 * result + (groups != null ? groups.hashCode() : 0);
         return result;
     }
 
@@ -140,6 +153,7 @@ public class RUser implements Serializable {
                 ", userop=" + userop +
                 ", userval='" + userval + '\'' +
                 ", tableName='" + tableName + '\'' +
+                ", groups='" + groups + '\'' +
                 '}';
     }
 }

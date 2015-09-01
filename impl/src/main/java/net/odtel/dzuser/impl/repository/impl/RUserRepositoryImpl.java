@@ -23,13 +23,24 @@ import java.util.List;
 @Transactional
 public class RUserRepositoryImpl implements RUserRepository {
 
-    private static String SELECT_FIND_ALL_DISTINCT = "SELECT DISTINCT username as username from ruser order by username limit ? offset ?";
+    //private static String SELECT_FIND_ALL_DISTINCT = "SELECT DISTINCT username as username from ruser order by username limit ? offset ?";
+    private static String SELECT_FIND_ALL_DISTINCT = "SELECT DISTINCT ruser.username as username, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser order by username limit ? offset ?";
+    private static String SELECT_LIKE_WITH_GROUP_ARRAY = "SELECT DISTINCT ruser.username as username, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser where ruser.username like ? order by groups DESC";
     private static String SELECT_COUNT_ALL_DISTINCT = "SELECT count (DISTINCT username) from ruser";
     private static String SELECT_COUNT_ALL_DISTINCT_LIKE = "SELECT count (DISTINCT username) from ruser where username like ?";
-    private static String SELECT_FROM_RUSER_WITH_SEARCH = "SELECT username, userid, userattr, userop, userval from ruser where username = ?";
-    private static String SELECT_FROM_RUSER_WITH_SEARCH_AND_LIMIT = "SELECT username, userid, userattr, userop, userval from ruser where username = ? limit ? offset ?";
-    private static String SELECT_FROM_RUSER_LIKE_WITH_SEARCH_AND_LIMIT = "SELECT DISTINCT username as username from ruser where username like ? limit ? offset ?";
+    private static String SELECT_FROM_RUSER_WITH_SEARCH = "SELECT username, userid, userattr, userop, userval, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser where username = ?";
+    //private static String SELECT_FROM_RUSER_WITH_SEARCH_AND_LIMIT = "SELECT username, userid, userattr, userop, userval from ruser where username = ? limit ? offset ?";
+    private static String SELECT_FROM_RUSER_WITH_SEARCH_AND_LIMIT = "SELECT username, userid, userattr, userop, userval, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser where username = ? limit ? offset ?";
+    private static String SELECT_FROM_RUSER_LIKE_WITH_SEARCH_AND_LIMIT = "SELECT DISTINCT username as username , array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser where username like ? limit ? offset ?";
     private static String SELECT_FROM_RUSERREPLY_WITH_SEARCH = "SELECT userreplyid, userreplyname, userreplyattr, userreplyop, userreplyval from ruserreply where userreplyname = ?";
+
+    private static String SELECT_FROM_RUSER_WITH_SEARCH_BY_NAME_AND_GROUP = "SELECT DISTINCT ruser.username as username, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser, musrgrp where ruser.username = ? AND musrgrp.username = ruser.username AND musrgrp.groupname = ? ";
+
+    private static String SELECT_FROM_RUSER_WITH_SEARCH_BY_NAME_LIKE_AND_GROUP_AND_LIMIT = "SELECT DISTINCT ruser.username as username, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser, musrgrp where ruser.username like ? AND musrgrp.username = ruser.username AND musrgrp.groupname = ? order by ruser.username limit ? offset ? ";
+    private static String COUNT_FROM_RUSER_WITH_SEARCH_BY_NAME_LIKE_AND_GROUP = "SELECT count(DISTINCT ruser.username) from ruser, musrgrp where ruser.username = ? AND musrgrp.username = ruser.username AND musrgrp.groupname = ? ";
+
+    private static String SELECT_FROM_RUSER_WITH_SEARCH_BY_GROUP_AND_LIMIT = "SELECT DISTINCT ruser.username as username, array_to_string(ARRAY(SELECT musrgrp.groupname from musrgrp WHERE musrgrp.username = ruser.username ), ',') AS groups from ruser, musrgrp where musrgrp.username = ruser.username AND musrgrp.groupname = ? order by ruser.username limit ? offset ? ";
+    private static String COUNT_FROM_RUSER_WITH_SEARCH_BY_GROUP = "SELECT count(DISTINCT ruser.username) from ruser, musrgrp where musrgrp.username = ruser.username AND musrgrp.groupname = ? ";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -37,8 +48,8 @@ public class RUserRepositoryImpl implements RUserRepository {
     @Override
     public Page<RUser> findUsernameDistinct (Pageable pageable) {
         List<RUser> list = this.jdbcTemplate.query(SELECT_FIND_ALL_DISTINCT,
-                new Object[] {pageable.getPageSize(), pageable.getOffset()}, new RUserNameMapper());
-        return (Page) new PageImpl<RUser>(list, pageable, getTotalRecords());
+                new Object[] {pageable.getPageSize(), pageable.getOffset()}, new RUserNameANDGroupsMapper());
+        return new PageImpl<RUser>(list, pageable, getTotalRecords());
     }
 
     @Override
@@ -52,14 +63,14 @@ public class RUserRepositoryImpl implements RUserRepository {
         List<RUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_WITH_SEARCH_AND_LIMIT,
                 new Object[] {name, pageable.getPageSize(), pageable.getOffset()}, new RUserMapper());
 
-        return (Page) new PageImpl(list, pageable, list.size());
+        return new PageImpl(list, pageable, list.size());
     }
 
     @Override
     public Page<RUser> findByUsernameLike (String name, Pageable pageable) {
         List<RUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_LIKE_WITH_SEARCH_AND_LIMIT,
-                new Object[] {name, pageable.getPageSize(), pageable.getOffset()}, new RUserNameMapper());
-        return (Page) new PageImpl(list, pageable, getTotalRecordsLike(name));
+                new Object[] {name, pageable.getPageSize(), pageable.getOffset()}, new RUserNameANDGroupsMapper());
+        return new PageImpl(list, pageable, getTotalRecordsLike(name));
     }
 
     public void saveUser (RUser rUsery) {
@@ -158,6 +169,37 @@ public class RUserRepositoryImpl implements RUserRepository {
         return total;
     }
 
+    private Long getTotalRecordsByNameAndGroups (String name, String group) {
+        String COUNT_FROM_RUSER_WITH_SEARCH_BY_NAME_AND_GROUP = "SELECT count( DISTINCT ruser.username) from ruser, musrgrp where ruser.username = ? AND musrgrp.username = ruser.username AND musrgrp.groupname = ?";
+        return this.jdbcTemplate.queryForObject(COUNT_FROM_RUSER_WITH_SEARCH_BY_NAME_AND_GROUP,
+                new Object[] {name, group}, new RowMapper<Long>() {
+                    @Override
+                    public Long mapRow (ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getLong(1);
+                    }
+                });
+    }
+
+    private Long getTotalRecordsByNameLikeAndGroups (String name, String group) {
+        return this.jdbcTemplate.queryForObject(COUNT_FROM_RUSER_WITH_SEARCH_BY_NAME_LIKE_AND_GROUP,
+                new Object[] {name, group}, new RowMapper<Long>() {
+                    @Override
+                    public Long mapRow (ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getLong(1);
+                    }
+                });
+    }
+
+    private Long getTotalRecordsByGroups (String group) {
+        return this.jdbcTemplate.queryForObject(COUNT_FROM_RUSER_WITH_SEARCH_BY_GROUP,
+                new Object[] {group}, new RowMapper<Long>() {
+                    @Override
+                    public Long mapRow (ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getLong(1);
+                    }
+                });
+    }
+
     @Override
     public void updateGroupForUser (RUserPair pair) {
         deleteGroupForUser(pair.getName());
@@ -214,6 +256,37 @@ public class RUserRepositoryImpl implements RUserRepository {
         );
     }
 
+    @Override
+    public Page<RUser> findByUsernameAndGroups (String name, String group, Pageable pageable) {
+        List<RUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_WITH_SEARCH_BY_NAME_AND_GROUP,
+                new Object[] {name, group},
+                new RUserNameANDGroupsMapper());
+        return (Page) new PageImpl(list, pageable, getTotalRecordsByNameAndGroups(name, group));
+
+    }
+
+    @Override
+    public Page<RUser> findByUsernameLikeAndGroups (String name, String group, Pageable pageable) {
+        List<RUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_WITH_SEARCH_BY_NAME_LIKE_AND_GROUP_AND_LIMIT,
+                new Object[] {name, group,
+                        pageable.getPageSize(),
+                        pageable.getOffset()},
+                new RUserNameANDGroupsMapper());
+        return (Page) new PageImpl(list, pageable, getTotalRecordsByNameLikeAndGroups(name, group));
+
+    }
+
+    @Override
+    public Page<RUser> findByGroups (String group, Pageable pageable) {
+        List<RUser> list = this.jdbcTemplate.query(SELECT_FROM_RUSER_WITH_SEARCH_BY_GROUP_AND_LIMIT,
+                new Object[] {group,
+                        pageable.getPageSize(),
+                        pageable.getOffset()},
+                new RUserNameANDGroupsMapper());
+        return new PageImpl(list, pageable, getTotalRecordsByGroups(group));
+
+    }
+
     private void deleteGroupForUser (String username) {
         this.jdbcTemplate.update(
                 "delete from musrgrp where username = ?",
@@ -250,6 +323,16 @@ public class RUserRepositoryImpl implements RUserRepository {
         }
     }
 
+    private static final class RUserNameANDGroupsMapper implements RowMapper<RUser> {
+        @Override
+        public RUser mapRow (ResultSet rs, int rowNum) throws SQLException {
+            RUser rUser = new RUser();
+            rUser.setUsername(rs.getString("username"));
+            rUser.setGroups(rs.getString("groups"));
+            return rUser;
+        }
+    }
+
     private static final class RUserMapper implements RowMapper<RUser> {
 
         @Override
@@ -261,6 +344,7 @@ public class RUserRepositoryImpl implements RUserRepository {
             rUser.setUserval(rs.getString("userval"));
             rUser.setId(rs.getLong("userid"));
             rUser.setTableName("ruser");
+            rUser.setGroups(rs.getString("groups"));
             return rUser;
         }
     }

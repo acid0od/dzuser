@@ -56,13 +56,25 @@
                     <div class="form-group form-group-sm" style="display:inline;">
                         <input th:field="*{userName}" class="form-control" th:placeholder="Search"/>
 
-                        <select class="form-control " th:field="*{nasid.id}">
+
+                        <select class="form-control " th:field="*{nasid.id}"
+                                th:unless="${currentpage == 'ruserlist.html'}">
                             <option th:value="NULL" th:text="'---Select Nas---'"></option>
                             <option th:each="nasid : ${nas}" th:value="${nasid.id}"
                                     th:text="${nasid.description}">
                                 Wireframe
                             </option>
                         </select>
+
+                        <select class="form-control " th:field="*{groupName}"
+                                th:if="${currentpage == 'ruserlist.html'}">
+                            <option th:value="NULL" th:text="'------------'"></option>
+                            <option th:each="group : ${rGroupReplyList}" th:value="${group.groupreplyname}"
+                                    th:text="${group.groupreplyname}">
+                                Wireframe
+                            </option>
+                        </select>
+
 
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
