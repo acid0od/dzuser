@@ -39,9 +39,9 @@
                         <thead>
                         <tr>
                             <th>N</th>
-                            <th>IP</th>
-                            <th>NAS</th>
-                            <th>NAS IP</th>
+                            <th th:text="#{jacctlist.acctuser.label}">IP</th>
+                            <th th:text="#{jacctlist.acctduration.label}">NAS</th>
+                            <th th:text="#{jacctlist.acctout.label}">NAS IP</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -49,8 +49,8 @@
 
                             <td th:text="${page.number} * 20 + ${rowStat.count}">N</td>
                             <td th:text="${jacct.acctuser}">Onions</td>
-                            <td th:text="${jacct.acctduration}">2.41</td>
-                            <td th:text="${jacct.acctout}">2.41</td>
+                            <td th:text="${#numbers.formatInteger(jacct.acctdurationHours, 3,'WHITESPACE')}">2.41</td>
+                            <td th:text="${#numbers.formatInteger(jacct.acctoutMb, 3,'WHITESPACE')}">2.41</td>
                         </tr>
                         </tbody>
                     </table>

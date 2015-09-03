@@ -118,6 +118,10 @@ public class JAcct implements Serializable {
         this.acctduration = acctduration;
     }
 
+    public Integer getAcctdurationHours () {
+        return Math.round(acctduration / 3600);
+    }
+
     public Long getAcctin () {
         return acctin;
     }
@@ -132,6 +136,10 @@ public class JAcct implements Serializable {
 
     public void setAcctout (Long acctout) {
         this.acctout = acctout;
+    }
+
+    public Integer getAcctoutMb () {
+        return Math.round(acctout / (1024 * 1024));
     }
 
     @Override
