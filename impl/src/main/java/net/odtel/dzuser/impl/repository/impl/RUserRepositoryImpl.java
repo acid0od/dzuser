@@ -111,7 +111,7 @@ public class RUserRepositoryImpl implements RUserRepository {
                     user.getUsername(),
                     user.getUserattr().getValue(),
                     user.getUserop().getValue(),
-                    StringUtils.setQuates(user.getUserval()),
+                    (org.apache.commons.lang3.StringUtils.containsAny(user.getUserval(), '%', '=', '\'', ':', ' ')) ? StringUtils.setQuates(user.getUserval()) : user.getUserval(),
                     user.getId());
         } else {
             this.jdbcTemplate.update(
@@ -120,7 +120,7 @@ public class RUserRepositoryImpl implements RUserRepository {
                     user.getUsername(),
                     user.getUserattr().getValue(),
                     user.getUserop().getValue(),
-                    StringUtils.setQuates(user.getUserval()));
+                    (org.apache.commons.lang3.StringUtils.containsAny(user.getUserval(), '%', '=', '\'', ':', ' ')) ? StringUtils.setQuates(user.getUserval()) : user.getUserval());
         }
     }
 
@@ -301,7 +301,8 @@ public class RUserRepositoryImpl implements RUserRepository {
                 rUser.getUsername(),
                 rUser.getUserattr().getValue(),
                 rUser.getUserop().getValue(),
-                rUser.getUserval());
+                (org.apache.commons.lang3.StringUtils.containsAny(rUser.getUserval(), '%', '=', '\'', ':', ' ')) ? StringUtils.setQuates(rUser.getUserval()) : rUser.getUserval());
+
     }
 
     private void update (RUser rUser) {
@@ -310,7 +311,7 @@ public class RUserRepositoryImpl implements RUserRepository {
                 rUser.getUsername(),
                 rUser.getUserattr().getValue(),
                 rUser.getUserop().getValue(),
-                rUser.getUserval(),
+                (org.apache.commons.lang3.StringUtils.containsAny(rUser.getUserval(), '%', '=', '\'', ':', ' ')) ? StringUtils.setQuates(rUser.getUserval()) : rUser.getUserval(),
                 rUser.getId());
     }
 
