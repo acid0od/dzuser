@@ -301,7 +301,7 @@ public class RUserRepositoryImpl implements RUserRepository {
                 rUser.getUsername(),
                 rUser.getUserattr().getValue(),
                 rUser.getUserop().getValue(),
-                StringUtils.setQuates(rUser.getUserval()));
+                rUser.getUserval());
     }
 
     private void update (RUser rUser) {
@@ -310,7 +310,7 @@ public class RUserRepositoryImpl implements RUserRepository {
                 rUser.getUsername(),
                 rUser.getUserattr().getValue(),
                 rUser.getUserop().getValue(),
-                StringUtils.setQuates(rUser.getUserval()),
+                rUser.getUserval(),
                 rUser.getId());
     }
 
