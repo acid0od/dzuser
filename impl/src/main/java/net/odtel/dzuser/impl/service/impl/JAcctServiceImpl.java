@@ -30,7 +30,7 @@ public class JAcctServiceImpl implements JAcctService {
 
         switch (searchPattern.getPar()) {
             case SearchPattern.FULL_NAME: {
-                if (searchRequest.getNasid() == null) {
+                if (searchRequest.getNasid() == null || searchRequest.getNasid().getId() == null) {
                     return jAcctRepository.viewTopLastMonth(searchPattern.getSearchPattern(), pageable);
                 } else {
                     return jAcctRepository.viewTopLastMonth(searchPattern.getSearchPattern(), searchRequest.getNasid().getId(), pageable);
@@ -38,7 +38,7 @@ public class JAcctServiceImpl implements JAcctService {
             }
 
             case SearchPattern.PARTIAL_NAME: {
-                if (searchRequest.getNasid() == null) {
+                if (searchRequest.getNasid() == null || searchRequest.getNasid().getId() == null) {
                     return jAcctRepository.viewTopLastMonthLike(searchPattern.getSearchPattern(), pageable);
                 } else {
                     return jAcctRepository.viewTopLastMonthLike(searchPattern.getSearchPattern(), searchRequest.getNasid().getId(), pageable);
@@ -46,7 +46,7 @@ public class JAcctServiceImpl implements JAcctService {
             }
 
             default: {
-                if (searchRequest.getNasid() == null) {
+                if (searchRequest.getNasid() == null || searchRequest.getNasid().getId() == null) {
                     return jAcctRepository.viewTopLastMonth(pageable);
                 } else {
                     return jAcctRepository.viewTopLastMonthLike("%", searchRequest.getNasid().getId(), pageable);
