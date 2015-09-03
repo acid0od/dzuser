@@ -22,9 +22,10 @@
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Журналы<span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="themes">
-                        <li><a href="/currentusers.html">На связи</a></li>
-                        <li><a href="/statistics.html">Журнал работы</a></li>
-                        <li><a href="/faillog.html">Журнал ошибок</a></li>
+                        <li><a href="/currentusers.html" th:href="@{/currentusers.html}">На связи</a></li>
+                        <li><a href="/statistics.html" th:href="@{/statistics.html}">Журнал работы</a></li>
+                        <li><a href="/faillog.html" th:href="@{/faillog.html}">Журнал ошибок</a></li>
+                        <li><a href="/jacctlist.html" th:href="@{/jacctlist.html}">TOP закачек</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
