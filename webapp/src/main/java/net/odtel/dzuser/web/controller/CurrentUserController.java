@@ -45,12 +45,10 @@ public class CurrentUserController {
     @ModelAttribute("searchRequest")
     public SearchRequestModel get () {
         return searchRequest;
-
     }
 
     @ModelAttribute("nas")
     public Collection<Nas> populateNas () {
-        LOGGER.info("Nas nas[]");
         return nasService.findActive();
     }
 
@@ -61,7 +59,6 @@ public class CurrentUserController {
 
     @ModelAttribute("nasview")
     public Collection<Nas> populateNasView () {
-        LOGGER.info("Nas view []");
         return nasService.findView();
     }
 
@@ -71,7 +68,7 @@ public class CurrentUserController {
                            @RequestParam(value = "order", required = false) boolean order,
                            @ModelAttribute("searchRequest") SearchRequestModel searchRequest,
                            Model model) {
-        LOGGER.info("Controller List model.[]");
+        LOGGER.debug("Controller List model.[Start]");
 
         int pageNum = page != null ? page : DEFAULT_PAGE_NUM;
 
@@ -84,7 +81,7 @@ public class CurrentUserController {
         Page<CurrentUser> paging = currentUserService.findByUserNameOrNasWithOrder(searchRequest, pageNum,
                 DEFAULT_PAGE_SIZE, sort, order);
 
-        LOGGER.info("Controller List paging.[{}]", paging.toString());
+        LOGGER.debug("Controller List paging. [{}]", paging.toString());
         model.addAttribute("searchRequest", searchRequest);
         model.addAttribute("order", order);
         model.addAttribute("page", paging);
@@ -96,7 +93,7 @@ public class CurrentUserController {
     @RequestMapping(value = "/currentusers", method = RequestMethod.POST)
     public String listPost (@ModelAttribute("searchRequest") SearchRequestModel searchRequest, final BindingResult result, final ModelMap modelMap) {
 
-        LOGGER.info("Controller List model.[] in POST");
+        LOGGER.debug("Controller List model.[Start] in POST");
         int pageNum = DEFAULT_PAGE_NUM;
 
         String sort = "userName";
@@ -107,7 +104,7 @@ public class CurrentUserController {
         Page<CurrentUser> paging = currentUserService.findByUserNameOrNasWithOrder(searchRequest, pageNum,
                 DEFAULT_PAGE_SIZE, sort, order);
 
-        LOGGER.info("Controller List paging.[{}]", paging.toString());
+        LOGGER.debug("Controller List paging.[{}]", paging.toString());
 
         modelMap.addAttribute("searchRequest", searchRequest);
         modelMap.addAttribute("order", order);
@@ -131,7 +128,7 @@ public class CurrentUserController {
 
         currentUserService.remove(userName);
 
-        LOGGER.debug("currentUsers: remove {}", userName);
+        LOGGER.info("currentUsers: remove {}", userName);
 
         Page<CurrentUser> paging = currentUserService.findByUserNameOrNasWithOrder(searchRequest, pageNum, DEFAULT_PAGE_SIZE, sort, order);
 

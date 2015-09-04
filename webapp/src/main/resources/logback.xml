@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+
+    <logger name="org.mortbay" level="ERROR"/>
+    <logger name="org.apache" level="ERROR"/>
+    <logger name="org.thymeleaf" level="ERROR"/>
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.hibernate" level="ERROR"/>
+    <logger name="net.odtel.dzuser.api" level="INFO"/>
+    <logger name="net.odtel.dzuser.impl" level="INFO"/>
+    <logger name="net.odtel.dzuser.web" level="INFO"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>web - %date [%thread] %-5level %logger{36} - %message system=%logger{0} service=dzuser%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
