@@ -45,7 +45,7 @@ public class RGroupReplyRepositoryImpl implements RGroupReplyRepository {
                         return rGroupReply;
                     }
                 });
-        return (Page) new PageImpl<RGroupReply>(list, pageable, getTotalRecords());
+        return new PageImpl<>(list, pageable, getTotalRecords());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RGroupReplyRepositoryImpl implements RGroupReplyRepository {
                 groupReply.getGroupreplyname(),
                 groupReply.getGroupreplyattr().getValue(),
                 groupReply.getGroupreplyop().getValue(),
-                StringUtils.setQuates(groupReply.getGroupreplyval()));
+                (org.apache.commons.lang3.StringUtils.containsAny(groupReply.getGroupreplyval(), '%', '=', '\'', ':', ' ')) ? StringUtils.setQuates(groupReply.getGroupreplyval()) : groupReply.getGroupreplyval());
     }
 
     private void update (RGroupReply groupReply) {
@@ -87,13 +87,12 @@ public class RGroupReplyRepositoryImpl implements RGroupReplyRepository {
                 groupReply.getGroupreplyname(),
                 groupReply.getGroupreplyattr().getValue(),
                 groupReply.getGroupreplyop().getValue(),
-                StringUtils.setQuates(groupReply.getGroupreplyval()),
+                (org.apache.commons.lang3.StringUtils.containsAny(groupReply.getGroupreplyval(), '%', '=', '\'', ':', ' ')) ? StringUtils.setQuates(groupReply.getGroupreplyval()) : groupReply.getGroupreplyval(),
                 groupReply.getId());
     }
 
     public Long nextId () {
-        Long id = this.jdbcTemplate.queryForObject("select max(groupreplyid) from rgroupreply", Long.class) + 1L;
-        return id;
+        return this.jdbcTemplate.queryForObject("select max(groupreplyid) from rgroupreply", Long.class) + 1L;
     }
 
     @Override
@@ -114,7 +113,7 @@ public class RGroupReplyRepositoryImpl implements RGroupReplyRepository {
 
     @Override
     public Collection<RGroupReply> findAllDistinctByGroupreplyname () {
-        List<RGroupReply> list = this.jdbcTemplate.query(SELECT_FIND_ALL_DISTINCT,
+        return this.jdbcTemplate.query(SELECT_FIND_ALL_DISTINCT,
                 new RowMapper<RGroupReply>() {
                     @Override
                     public RGroupReply mapRow (ResultSet rs, int rowNum) throws SQLException {
@@ -124,17 +123,15 @@ public class RGroupReplyRepositoryImpl implements RGroupReplyRepository {
                         return rGroupReply;
                     }
                 });
-        return list;
     }
 
     private Long getTotalRecords () {
-        Long total = this.jdbcTemplate.queryForObject(SELECT_COUNT_ALL_DISTINCT, new RowMapper<Long>() {
+        return this.jdbcTemplate.queryForObject(SELECT_COUNT_ALL_DISTINCT, new RowMapper<Long>() {
             @Override
             public Long mapRow (ResultSet rs, int rowNum) throws SQLException {
                 return rs.getLong(1);
             }
         });
-        return total;
     }
 
     private static final class RGroupReplyMapper implements RowMapper<RGroupReply> {
